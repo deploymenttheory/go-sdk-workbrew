@@ -4,15 +4,6 @@ const (
 	// DefaultBaseURL is the default base URL for the Workbrew API
 	DefaultBaseURL = "https://console.workbrew.com"
 
-	// DefaultAPIVersion is the default API version
-	DefaultAPIVersion = "v0"
-
-	// APIVersionHeader is the header name for the API version
-	APIVersionHeader = "X-Workbrew-API-Version"
-
-	// AuthorizationHeader is the header name for the authorization token
-	AuthorizationHeader = "Authorization"
-
 	// UserAgentBase is the base user agent string prefix
 	UserAgentBase = "go-api-sdk-workbrew"
 
@@ -58,8 +49,3 @@ const (
 	FormatCSV  = "csv"
 )
 
-// HTTP headers
-const (
-	ContentTypeJSON = "application/json"
-	AcceptJSON      = "application/json"
-)

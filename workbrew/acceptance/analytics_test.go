@@ -15,7 +15,7 @@ func TestAcceptance_Analytics_ListAnalytics(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := analytics.NewService(Client)
+		service := analytics.NewAnalytics(Client)
 
 		LogTestStage(t, "📈 List Analytics", "Testing ListAnalytics")
 
@@ -52,7 +52,7 @@ func TestAcceptance_Analytics_ListAnalyticsCSV(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := analytics.NewService(Client)
+		service := analytics.NewAnalytics(Client)
 
 		LogTestStage(t, "📊 List Analytics CSV", "Testing ListAnalyticsCSV")
 

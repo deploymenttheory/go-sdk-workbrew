@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew/client"
+	
 	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew"
 	"go.uber.org/zap"
 )
@@ -28,8 +28,8 @@ func main() {
 
 	// Create HTTP client
 	workbrewClient, err := workbrew.NewClient(apiKey, workspace,
-		client.WithLogger(logger),
-		client.WithBaseURL("https://console.workbrew.com"),
+		workbrew.WithLogger(logger),
+		workbrew.WithBaseURL("https://console.workbrew.com"),
 	)
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)

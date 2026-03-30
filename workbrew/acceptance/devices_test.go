@@ -15,7 +15,7 @@ func TestAcceptance_Devices_ListDevices(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := devices.NewService(Client)
+		service := devices.NewDevices(Client)
 
 		LogTestStage(t, "🖥️  List Devices", "Testing ListDevices")
 
@@ -52,7 +52,7 @@ func TestAcceptance_Devices_ListDevicesCSV(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := devices.NewService(Client)
+		service := devices.NewDevices(Client)
 
 		LogTestStage(t, "📊 List Devices CSV", "Testing ListDevicesCSV")
 
@@ -82,7 +82,7 @@ func TestAcceptance_Devices_ListDevices_ValidateFields(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := devices.NewService(Client)
+		service := devices.NewDevices(Client)
 
 		LogTestStage(t, "✅ Validate Fields", "Testing device field validation")
 

@@ -15,7 +15,7 @@ func TestAcceptance_Licenses_ListLicenses(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := licenses.NewService(Client)
+		service := licenses.NewLicenses(Client)
 
 		LogTestStage(t, "📜 List Licenses", "Testing ListLicenses")
 
@@ -52,7 +52,7 @@ func TestAcceptance_Licenses_ListLicensesCSV(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := licenses.NewService(Client)
+		service := licenses.NewLicenses(Client)
 
 		LogTestStage(t, "📊 List Licenses CSV", "Testing ListLicensesCSV")
 

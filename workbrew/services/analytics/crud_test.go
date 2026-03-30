@@ -13,7 +13,7 @@ import (
 )
 
 // setupMockClient creates a client with httpmock enabled
-func setupMockClient(t *testing.T) (*Service, string) {
+func setupMockClient(t *testing.T) (*Analytics, string) {
 	// Create test logger
 	logger := zap.NewNop()
 
@@ -36,7 +36,7 @@ func setupMockClient(t *testing.T) (*Service, string) {
 	})
 
 	// Create analytics service
-	return NewService(httpClient), baseURL
+	return NewAnalytics(httpClient), baseURL
 }
 
 func TestListAnalytics_Success(t *testing.T) {

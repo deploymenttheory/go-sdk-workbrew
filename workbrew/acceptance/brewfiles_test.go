@@ -17,7 +17,7 @@ func TestAcceptance_Brewfiles_ListBrewfiles(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := brewfiles.NewService(Client)
+		service := brewfiles.NewBrewfiles(Client)
 
 		LogTestStage(t, "📝 List Brewfiles", "Testing ListBrewfiles")
 
@@ -54,7 +54,7 @@ func TestAcceptance_Brewfiles_ListBrewfilesCSV(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := brewfiles.NewService(Client)
+		service := brewfiles.NewBrewfiles(Client)
 
 		LogTestStage(t, "📊 List Brewfiles CSV", "Testing ListBrewfilesCSV")
 
@@ -84,7 +84,7 @@ func TestAcceptance_Brewfiles_CRUD(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := brewfiles.NewService(Client)
+		service := brewfiles.NewBrewfiles(Client)
 
 		// Generate unique label for test
 		testLabel := fmt.Sprintf("test-brewfile-%d", time.Now().Unix())
@@ -217,7 +217,7 @@ func TestAcceptance_Brewfiles_ListBrewfileRuns(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := brewfiles.NewService(Client)
+		service := brewfiles.NewBrewfiles(Client)
 
 		LogTestStage(t, "🏃 List Runs", "Testing ListBrewfileRuns for: %s", Config.KnownBrewfileName)
 

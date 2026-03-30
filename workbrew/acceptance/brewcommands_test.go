@@ -15,7 +15,7 @@ func TestAcceptance_BrewCommands_ListBrewCommands(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := brewcommands.NewService(Client)
+		service := brewcommands.NewBrewCommands(Client)
 
 		LogTestStage(t, "⚡ List Commands", "Testing ListBrewCommands")
 
@@ -53,7 +53,7 @@ func TestAcceptance_BrewCommands_ListBrewCommandsCSV(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := brewcommands.NewService(Client)
+		service := brewcommands.NewBrewCommands(Client)
 
 		LogTestStage(t, "📊 List Commands CSV", "Testing ListBrewCommandsCSV")
 
@@ -89,7 +89,7 @@ func TestAcceptance_BrewCommands_CreateCommand(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := brewcommands.NewService(Client)
+		service := brewcommands.NewBrewCommands(Client)
 
 		LogTestStage(t, "➕ Create Command", "Creating test command: brew --version")
 

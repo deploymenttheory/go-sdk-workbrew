@@ -15,7 +15,7 @@ func TestAcceptance_BrewConfigurations_ListBrewConfigurations(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := brewconfigurations.NewService(Client)
+		service := brewconfigurations.NewBrewConfigurations(Client)
 
 		LogTestStage(t, "⚙️  List Configurations", "Testing ListBrewConfigurations")
 
@@ -52,7 +52,7 @@ func TestAcceptance_BrewConfigurations_ListBrewConfigurationsCSV(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := brewconfigurations.NewService(Client)
+		service := brewconfigurations.NewBrewConfigurations(Client)
 
 		LogTestStage(t, "📊 List Configurations CSV", "Testing ListBrewConfigurationsCSV")
 

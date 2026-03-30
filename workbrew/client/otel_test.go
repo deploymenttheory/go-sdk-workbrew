@@ -74,7 +74,7 @@ func TestEnableTracing_CustomConfig(t *testing.T) {
 		} `json:"data"`
 	}
 	var result TestResponse
-	_, err = transport.Get(ctx, "/test", nil, nil, &result)
+	_, err = transport.NewRequest(ctx).SetResult(&result).Get("/test")
 	require.NoError(t, err)
 
 	// Verify span was created
@@ -154,7 +154,7 @@ func TestEnableTracing_WithCustomSpanNameFormatter(t *testing.T) {
 		} `json:"data"`
 	}
 	var result TestResponse
-	_, err = transport.Get(ctx, "/test/path", nil, nil, &result)
+	_, err = transport.NewRequest(ctx).SetResult(&result).Get("/test/path")
 	require.NoError(t, err)
 
 	// Verify custom span name
@@ -236,7 +236,7 @@ func TestEnableTracing_ErrorPropagation(t *testing.T) {
 		} `json:"data"`
 	}
 	var result TestResponse
-	_, err = transport.Get(ctx, "/not-found", nil, nil, &result)
+	_, err = transport.NewRequest(ctx).SetResult(&result).Get("/not-found")
 
 	// The request should return an API error
 	require.Error(t, err)

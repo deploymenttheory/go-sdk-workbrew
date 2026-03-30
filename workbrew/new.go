@@ -30,19 +30,19 @@ type Client struct {
 	transport *client.Transport
 
 	// Services - users should only call methods on these services
-	Analytics            *analytics.Service
-	BrewCommands         *brewcommands.Service
-	BrewConfigurations   *brewconfigurations.Service
-	Brewfiles            *brewfiles.Service
-	BrewTaps             *brewtaps.Service
-	Casks                *casks.Service
-	DeviceGroups         *devicegroups.Service
-	Devices              *devices.Service
-	Events               *events.Service
-	Formulae             *formulae.Service
-	Licenses             *licenses.Service
-	Vulnerabilities      *vulnerabilities.Service
-	VulnerabilityChanges *vulnerabilitychanges.Service
+	Analytics            *analytics.Analytics
+	BrewCommands         *brewcommands.BrewCommands
+	BrewConfigurations   *brewconfigurations.BrewConfigurations
+	Brewfiles            *brewfiles.Brewfiles
+	BrewTaps             *brewtaps.BrewTaps
+	Casks                *casks.Casks
+	DeviceGroups         *devicegroups.DeviceGroups
+	Devices              *devices.Devices
+	Events               *events.Events
+	Formulae             *formulae.Formulae
+	Licenses             *licenses.Licenses
+	Vulnerabilities      *vulnerabilities.Vulnerabilities
+	VulnerabilityChanges *vulnerabilitychanges.VulnerabilityChanges
 }
 
 // NewClient creates a new Workbrew API client
@@ -59,7 +59,7 @@ type Client struct {
 //	    "your-workspace",
 //	    workbrew.WithDebug(),
 //	)
-func NewClient(apiKey string, workspaceName string, options ...client.ClientOption) (*Client, error) {
+func NewClient(apiKey string, workspaceName string, options ...ClientOption) (*Client, error) {
 	// Create base HTTP transport
 	transport, err := client.NewTransport(apiKey, workspaceName, options...)
 	if err != nil {
@@ -69,19 +69,19 @@ func NewClient(apiKey string, workspaceName string, options ...client.ClientOpti
 	// Initialize service clients
 	c := &Client{
 		transport:            transport,
-		Analytics:            analytics.NewService(transport),
-		BrewCommands:         brewcommands.NewService(transport),
-		BrewConfigurations:   brewconfigurations.NewService(transport),
-		Brewfiles:            brewfiles.NewService(transport),
-		BrewTaps:             brewtaps.NewService(transport),
-		Casks:                casks.NewService(transport),
-		DeviceGroups:         devicegroups.NewService(transport),
-		Devices:              devices.NewService(transport),
-		Events:               events.NewService(transport),
-		Formulae:             formulae.NewService(transport),
-		Licenses:             licenses.NewService(transport),
-		Vulnerabilities:      vulnerabilities.NewService(transport),
-		VulnerabilityChanges: vulnerabilitychanges.NewService(transport),
+		Analytics:            analytics.NewAnalytics(transport),
+		BrewCommands:         brewcommands.NewBrewCommands(transport),
+		BrewConfigurations:   brewconfigurations.NewBrewConfigurations(transport),
+		Brewfiles:            brewfiles.NewBrewfiles(transport),
+		BrewTaps:             brewtaps.NewBrewTaps(transport),
+		Casks:                casks.NewCasks(transport),
+		DeviceGroups:         devicegroups.NewDeviceGroups(transport),
+		Devices:              devices.NewDevices(transport),
+		Events:               events.NewEvents(transport),
+		Formulae:             formulae.NewFormulae(transport),
+		Licenses:             licenses.NewLicenses(transport),
+		Vulnerabilities:      vulnerabilities.NewVulnerabilities(transport),
+		VulnerabilityChanges: vulnerabilitychanges.NewVulnerabilityChanges(transport),
 	}
 
 	return c, nil
@@ -100,7 +100,7 @@ func NewClient(apiKey string, workspaceName string, options ...client.ClientOpti
 // Example:
 //
 //	client, err := workbrew.NewClientFromEnv()
-func NewClientFromEnv(options ...client.ClientOption) (*Client, error) {
+func NewClientFromEnv(options ...ClientOption) (*Client, error) {
 	apiKey := os.Getenv("WORKBREW_API_KEY")
 	if apiKey == "" {
 		return nil, fmt.Errorf("WORKBREW_API_KEY environment variable is required")

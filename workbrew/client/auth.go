@@ -3,6 +3,7 @@ package client
 import (
 	"fmt"
 
+	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew/constants"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )
@@ -41,15 +42,15 @@ func SetupAuthentication(client *resty.Client, authConfig *AuthConfig, logger *z
 	}
 
 	// Set bearer token authentication
-	client.SetAuthScheme("Bearer")
+	client.SetAuthScheme(constants.BearerScheme)
 	client.SetAuthToken(authConfig.APIKey)
 
 	// Set API version header
 	apiVersion := authConfig.APIVersion
 	if apiVersion == "" {
-		apiVersion = DefaultAPIVersion
+		apiVersion = constants.DefaultAPIVersion
 	}
-	client.SetHeader(APIVersionHeader, apiVersion)
+	client.SetHeader(constants.APIVersionHeader, apiVersion)
 
 	logger.Info("Authentication configured",
 		zap.String("api_version", apiVersion))

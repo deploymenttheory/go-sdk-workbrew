@@ -15,7 +15,7 @@ func TestAcceptance_Formulae_ListFormulae(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := formulae.NewService(Client)
+		service := formulae.NewFormulae(Client)
 
 		LogTestStage(t, "🍺 List Formulae", "Testing ListFormulae")
 
@@ -53,7 +53,7 @@ func TestAcceptance_Formulae_ListFormulaeCSV(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := formulae.NewService(Client)
+		service := formulae.NewFormulae(Client)
 
 		LogTestStage(t, "📊 List Formulae CSV", "Testing ListFormulaeCSV")
 
@@ -83,7 +83,7 @@ func TestAcceptance_Formulae_ValidateFields(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := formulae.NewService(Client)
+		service := formulae.NewFormulae(Client)
 
 		LogTestStage(t, "✅ Validate Fields", "Testing formula field validation")
 

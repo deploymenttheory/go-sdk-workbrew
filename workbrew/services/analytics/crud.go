@@ -3,58 +3,53 @@ package analytics
 import (
 	"context"
 
-	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew/interfaces"
+	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew/client"
+	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew/constants"
+	"resty.dev/v3"
 )
 
-type (
-	// AnalyticsServiceInterface defines the interface for analytics operations
+// AnalyticsServiceInterface defines the interface for analytics operations
+//
+// Workbrew API docs: https://console.workbrew.com/documentation/api
+type AnalyticsServiceInterface interface {
+	// ListAnalytics returns a list of analytics data showing command usage statistics per device
 	//
-	// Workbrew API docs: https://console.workbrew.com/documentation/api
-	AnalyticsServiceInterface interface {
-		// ListAnalytics returns a list of analytics data showing command usage statistics per device
-		//
-		// Returns analytics records with device, command, last run timestamp, and count information
-		ListAnalytics(ctx context.Context) (*AnalyticsResponse, *interfaces.Response, error)
+	// Returns analytics records with device, command, last run timestamp, and count information
+	ListAnalytics(ctx context.Context) (*AnalyticsResponse, *resty.Response, error)
 
-		// ListAnalyticsCSV returns a list of analytics data in CSV format
-		//
-		// Returns the same analytics data as ListAnalytics but formatted as CSV
-		ListAnalyticsCSV(ctx context.Context) ([]byte, *interfaces.Response, error)
-	}
-
-	// Service handles communication with the analytics
-	// related methods of the Workbrew API.
+	// ListAnalyticsCSV returns a list of analytics data in CSV format
 	//
-	// Workbrew API docs: https://console.workbrew.com/documentation/api
-	Service struct {
-		client interfaces.HTTPClient
-	}
-)
+	// Returns the same analytics data as ListAnalytics but formatted as CSV
+	ListAnalyticsCSV(ctx context.Context) ([]byte, *resty.Response, error)
+}
 
-// Ensure Service implements AnalyticsServiceInterface
-var _ AnalyticsServiceInterface = (*Service)(nil)
+// Analytics handles communication with the analytics
+// related methods of the Workbrew API.
+//
+// Workbrew API docs: https://console.workbrew.com/documentation/api
+type Analytics struct {
+	client client.Client
+}
 
-// NewService creates a new analytics service
-func NewService(client interfaces.HTTPClient) *Service {
-	return &Service{
+// Ensure Analytics implements AnalyticsServiceInterface
+var _ AnalyticsServiceInterface = (*Analytics)(nil)
+
+// NewAnalytics creates a new analytics service
+func NewAnalytics(client client.Client) *Analytics {
+	return &Analytics{
 		client: client,
 	}
 }
 
 // ListAnalytics retrieves all analytics in JSON format
 // URL: GET https://console.workbrew.com/workspaces/{workspace_name}/analytics.json
-func (s *Service) ListAnalytics(ctx context.Context) (*AnalyticsResponse, *interfaces.Response, error) {
-	endpoint := EndpointAnalyticsJSON
-
-	headers := map[string]string{
-		"Accept":       "application/json",
-		"Content-Type": "application/json",
-	}
-
-	queryParams := make(map[string]string)
-
+func (s *Analytics) ListAnalytics(ctx context.Context) (*AnalyticsResponse, *resty.Response, error) {
 	var result AnalyticsResponse
-	resp, err := s.client.Get(ctx, endpoint, queryParams, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(constants.EndpointAnalyticsJSON)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -64,16 +59,10 @@ func (s *Service) ListAnalytics(ctx context.Context) (*AnalyticsResponse, *inter
 
 // ListAnalyticsCSV retrieves all analytics in CSV format
 // URL: GET https://console.workbrew.com/workspaces/{workspace_name}/analytics.csv
-func (s *Service) ListAnalyticsCSV(ctx context.Context) ([]byte, *interfaces.Response, error) {
-	endpoint := EndpointAnalyticsCSV
-
-	headers := map[string]string{
-		"Accept": "text/csv",
-	}
-
-	queryParams := make(map[string]string)
-
-	resp, csvData, err := s.client.GetBytes(ctx, endpoint, queryParams, headers)
+func (s *Analytics) ListAnalyticsCSV(ctx context.Context) ([]byte, *resty.Response, error) {
+	resp, csvData, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.TextCSV).
+		GetBytes(constants.EndpointAnalyticsCSV)
 	if err != nil {
 		return nil, resp, err
 	}

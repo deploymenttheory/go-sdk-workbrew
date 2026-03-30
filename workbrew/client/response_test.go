@@ -1,300 +1,112 @@
 package client
 
 import (
+	"encoding/json"
 	"net/http"
+	"net/http/httptest"
 	"testing"
-	"time"
-
-	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew/interfaces"
 )
 
-func TestIsResponseSuccess(t *testing.T) {
-	tests := []struct {
-		name     string
-		resp     *interfaces.Response
-		expected bool
-	}{
-		{
-			name:     "nil response",
-			resp:     nil,
-			expected: false,
-		},
-		{
-			name:     "200 OK",
-			resp:     &interfaces.Response{StatusCode: 200},
-			expected: true,
-		},
-		{
-			name:     "201 Created",
-			resp:     &interfaces.Response{StatusCode: 201},
-			expected: true,
-		},
-		{
-			name:     "299 edge case",
-			resp:     &interfaces.Response{StatusCode: 299},
-			expected: true,
-		},
-		{
-			name:     "400 Bad Request",
-			resp:     &interfaces.Response{StatusCode: 400},
-			expected: false,
-		},
-		{
-			name:     "404 Not Found",
-			resp:     &interfaces.Response{StatusCode: 404},
-			expected: false,
-		},
-		{
-			name:     "500 Internal Server Error",
-			resp:     &interfaces.Response{StatusCode: 500},
-			expected: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := IsResponseSuccess(tt.resp)
-			if result != tt.expected {
-				t.Errorf("IsResponseSuccess() = %v, want %v", result, tt.expected)
-			}
-		})
-	}
-}
-
-func TestIsResponseError(t *testing.T) {
-	tests := []struct {
-		name     string
-		resp     *interfaces.Response
-		expected bool
-	}{
-		{
-			name:     "nil response",
-			resp:     nil,
-			expected: false,
-		},
-		{
-			name:     "200 OK",
-			resp:     &interfaces.Response{StatusCode: 200},
-			expected: false,
-		},
-		{
-			name:     "400 Bad Request",
-			resp:     &interfaces.Response{StatusCode: 400},
-			expected: true,
-		},
-		{
-			name:     "404 Not Found",
-			resp:     &interfaces.Response{StatusCode: 404},
-			expected: true,
-		},
-		{
-			name:     "429 Too Many Requests",
-			resp:     &interfaces.Response{StatusCode: 429},
-			expected: true,
-		},
-		{
-			name:     "500 Internal Server Error",
-			resp:     &interfaces.Response{StatusCode: 500},
-			expected: true,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := IsResponseError(tt.resp)
-			if result != tt.expected {
-				t.Errorf("IsResponseError() = %v, want %v", result, tt.expected)
-			}
-		})
-	}
-}
-
 func TestGetResponseHeader(t *testing.T) {
-	headers := make(http.Header)
-	headers.Set("Content-Type", "application/json")
-	headers.Set("X-Custom-Header", "test-value")
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("X-Custom-Header", "test-value")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]string{"id": "1"})
+	}))
+	defer server.Close()
 
-	tests := []struct {
-		name     string
-		resp     *interfaces.Response
-		key      string
-		expected string
-	}{
-		{
-			name:     "nil response",
-			resp:     nil,
-			key:      "Content-Type",
-			expected: "",
-		},
-		{
-			name:     "nil headers",
-			resp:     &interfaces.Response{},
-			key:      "Content-Type",
-			expected: "",
-		},
-		{
-			name:     "existing header",
-			resp:     &interfaces.Response{Headers: headers},
-			key:      "Content-Type",
-			expected: "application/json",
-		},
-		{
-			name:     "case insensitive header",
-			resp:     &interfaces.Response{Headers: headers},
-			key:      "content-type",
-			expected: "application/json",
-		},
-		{
-			name:     "missing header",
-			resp:     &interfaces.Response{Headers: headers},
-			key:      "Missing-Header",
-			expected: "",
-		},
+	transport := setupTestClient(t, server.URL)
+	var result map[string]string
+	resp, err := transport.NewRequest(t.Context()).
+		SetResult(&result).
+		Get("/")
+
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := GetResponseHeader(tt.resp, tt.key)
-			if result != tt.expected {
-				t.Errorf("GetResponseHeader() = %v, want %v", result, tt.expected)
-			}
-		})
+	if got := GetResponseHeader(resp, "Content-Type"); got != "application/json" {
+		t.Errorf("GetResponseHeader(Content-Type) = %q, want %q", got, "application/json")
 	}
-}
-
-func TestGetRateLimitHeaders(t *testing.T) {
-	tests := []struct {
-		name              string
-		resp              *interfaces.Response
-		expectedLimit     string
-		expectedRemaining string
-		expectedReset     string
-		expectedRetry     string
-	}{
-		{
-			name:              "nil response",
-			resp:              nil,
-			expectedLimit:     "",
-			expectedRemaining: "",
-			expectedReset:     "",
-			expectedRetry:     "",
-		},
-		{
-			name: "rate limit headers present",
-			resp: &interfaces.Response{
-				Headers: http.Header{
-					"X-Api-Quota-Limit":     []string{"500"},
-					"X-Api-Quota-Remaining": []string{"450"},
-					"X-Api-Quota-Reset":     []string{"1640000000"},
-					"Retry-After":           []string{"60"},
-				},
-			},
-			expectedLimit:     "500",
-			expectedRemaining: "450",
-			expectedReset:     "1640000000",
-			expectedRetry:     "60",
-		},
-		{
-			name: "partial rate limit headers",
-			resp: &interfaces.Response{
-				Headers: http.Header{
-					"X-Api-Quota-Limit":     []string{"500"},
-					"X-Api-Quota-Remaining": []string{"450"},
-				},
-			},
-			expectedLimit:     "500",
-			expectedRemaining: "450",
-			expectedReset:     "",
-			expectedRetry:     "",
-		},
-		{
-			name: "no rate limit headers",
-			resp: &interfaces.Response{
-				Headers: make(http.Header),
-			},
-			expectedLimit:     "",
-			expectedRemaining: "",
-			expectedReset:     "",
-			expectedRetry:     "",
-		},
+	if got := GetResponseHeader(resp, "X-Custom-Header"); got != "test-value" {
+		t.Errorf("GetResponseHeader(X-Custom-Header) = %q, want %q", got, "test-value")
 	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			limit, remaining, reset, retry := GetRateLimitHeaders(tt.resp)
-			if limit != tt.expectedLimit {
-				t.Errorf("limit = %v, want %v", limit, tt.expectedLimit)
-			}
-			if remaining != tt.expectedRemaining {
-				t.Errorf("remaining = %v, want %v", remaining, tt.expectedRemaining)
-			}
-			if reset != tt.expectedReset {
-				t.Errorf("reset = %v, want %v", reset, tt.expectedReset)
-			}
-			if retry != tt.expectedRetry {
-				t.Errorf("retry = %v, want %v", retry, tt.expectedRetry)
-			}
-		})
+	if got := GetResponseHeader(resp, "Missing-Header"); got != "" {
+		t.Errorf("GetResponseHeader(Missing-Header) = %q, want empty", got)
+	}
+	if got := GetResponseHeader(nil, "Content-Type"); got != "" {
+		t.Errorf("GetResponseHeader(nil, ...) = %q, want empty", got)
 	}
 }
 
 func TestGetResponseHeaders(t *testing.T) {
-	headers := make(http.Header)
-	headers.Set("Content-Type", "application/json")
-	headers.Set("X-Custom-Header", "test-value")
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("X-Custom", "value")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]string{"id": "1"})
+	}))
+	defer server.Close()
 
-	tests := []struct {
-		name     string
-		resp     *interfaces.Response
-		expected int // number of headers
-	}{
-		{
-			name:     "nil response",
-			resp:     nil,
-			expected: 0,
-		},
-		{
-			name:     "response with headers",
-			resp:     &interfaces.Response{Headers: headers},
-			expected: 2,
-		},
+	transport := setupTestClient(t, server.URL)
+	var result map[string]string
+	resp, err := transport.NewRequest(t.Context()).SetResult(&result).Get("/")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := GetResponseHeaders(tt.resp)
-			if len(result) != tt.expected {
-				t.Errorf("GetResponseHeaders() returned %d headers, want %d", len(result), tt.expected)
-			}
-		})
+	headers := GetResponseHeaders(resp)
+	if headers == nil {
+		t.Fatal("GetResponseHeaders() returned nil")
+	}
+	if len(headers) == 0 {
+		t.Error("GetResponseHeaders() returned empty map")
+	}
+
+	// Nil response returns empty map
+	empty := GetResponseHeaders(nil)
+	if len(empty) != 0 {
+		t.Errorf("GetResponseHeaders(nil) = %d headers, want 0", len(empty))
 	}
 }
 
-func TestResponseStructFields(t *testing.T) {
-	// Test that Response struct can hold all expected fields
-	resp := &interfaces.Response{
-		StatusCode: 200,
-		Status:     "200 OK",
-		Headers:    make(http.Header),
-		Body:       []byte("test body"),
-		Duration:   100 * time.Millisecond,
-		ReceivedAt: time.Now(),
-		Size:       9,
+func TestGetRateLimitHeaders(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("X-Api-Quota-Limit", "500")
+		w.Header().Set("X-Api-Quota-Remaining", "450")
+		w.Header().Set("X-Api-Quota-Reset", "1640000000")
+		w.Header().Set("Retry-After", "60")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]string{"id": "1"})
+	}))
+	defer server.Close()
+
+	transport := setupTestClient(t, server.URL)
+	var result map[string]string
+	resp, err := transport.NewRequest(t.Context()).SetResult(&result).Get("/")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if resp.StatusCode != 200 {
-		t.Errorf("StatusCode = %v, want 200", resp.StatusCode)
+	limit, remaining, reset, retry := GetRateLimitHeaders(resp)
+	if limit != "500" {
+		t.Errorf("limit = %q, want %q", limit, "500")
 	}
-	if resp.Status != "200 OK" {
-		t.Errorf("Status = %v, want '200 OK'", resp.Status)
+	if remaining != "450" {
+		t.Errorf("remaining = %q, want %q", remaining, "450")
 	}
-	if resp.Duration != 100*time.Millisecond {
-		t.Errorf("Duration = %v, want 100ms", resp.Duration)
+	if reset != "1640000000" {
+		t.Errorf("reset = %q, want %q", reset, "1640000000")
 	}
-	if resp.Size != 9 {
-		t.Errorf("Size = %v, want 9", resp.Size)
+	if retry != "60" {
+		t.Errorf("retryAfter = %q, want %q", retry, "60")
 	}
-	if string(resp.Body) != "test body" {
-		t.Errorf("Body = %v, want 'test body'", string(resp.Body))
+
+	// Nil response returns empty strings
+	l, r, rs, ra := GetRateLimitHeaders(nil)
+	if l != "" || r != "" || rs != "" || ra != "" {
+		t.Error("GetRateLimitHeaders(nil) should return empty strings")
 	}
 }

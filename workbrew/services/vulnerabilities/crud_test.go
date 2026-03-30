@@ -12,7 +12,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func setupMockClient(t *testing.T) (*Service, string) {
+func setupMockClient(t *testing.T) (*Vulnerabilities, string) {
 	logger := zap.NewNop()
 	baseURL := "https://console.workbrew.com/workspaces/test-workspace"
 
@@ -27,7 +27,7 @@ func setupMockClient(t *testing.T) (*Service, string) {
 		httpmock.DeactivateAndReset()
 	})
 
-	return NewService(httpClient), baseURL
+	return NewVulnerabilities(httpClient), baseURL
 }
 
 func TestListVulnerabilities_Success(t *testing.T) {

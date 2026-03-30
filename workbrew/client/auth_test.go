@@ -3,6 +3,7 @@ package client
 import (
 	"testing"
 
+	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew/constants"
 	"go.uber.org/zap/zaptest"
 	"resty.dev/v3"
 )
@@ -71,7 +72,7 @@ func TestSetupAuthentication_Success(t *testing.T) {
 
 	// Verify API version header is set
 	headers := client.Header()
-	if got := headers.Get(APIVersionHeader); got != "v1" {
+	if got := headers.Get(constants.APIVersionHeader); got != "v1" {
 		t.Errorf("API version header = %q, want %q", got, "v1")
 	}
 }
@@ -93,8 +94,8 @@ func TestSetupAuthentication_DefaultAPIVersion(t *testing.T) {
 
 	// Verify default API version is used
 	headers := client.Header()
-	if got := headers.Get(APIVersionHeader); got != DefaultAPIVersion {
-		t.Errorf("API version header = %q, want %q (default)", got, DefaultAPIVersion)
+	if got := headers.Get(constants.APIVersionHeader); got != constants.DefaultAPIVersion {
+		t.Errorf("API version header = %q, want %q (default)", got, constants.DefaultAPIVersion)
 	}
 }
 
@@ -157,7 +158,7 @@ func TestSetupAuthentication_CustomAPIVersion(t *testing.T) {
 		{
 			name:           "empty uses default",
 			apiVersion:     "",
-			expectedHeader: DefaultAPIVersion,
+			expectedHeader: constants.DefaultAPIVersion,
 		},
 		{
 			name:           "custom version string",
@@ -180,7 +181,7 @@ func TestSetupAuthentication_CustomAPIVersion(t *testing.T) {
 			}
 
 			headers := client.Header()
-			if got := headers.Get(APIVersionHeader); got != tt.expectedHeader {
+			if got := headers.Get(constants.APIVersionHeader); got != tt.expectedHeader {
 				t.Errorf("API version header = %q, want %q", got, tt.expectedHeader)
 			}
 		})
@@ -205,7 +206,7 @@ func TestSetupAuthentication_BearerTokenSet(t *testing.T) {
 	// Note: resty's internal auth settings aren't directly accessible,
 	// but we can verify the setup completed without error
 	headers := client.Header()
-	if got := headers.Get(APIVersionHeader); got != "v1" {
+	if got := headers.Get(constants.APIVersionHeader); got != "v1" {
 		t.Errorf("API version header = %q, want %q", got, "v1")
 	}
 }

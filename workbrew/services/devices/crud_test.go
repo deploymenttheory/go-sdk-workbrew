@@ -13,7 +13,7 @@ import (
 )
 
 // setupMockClient creates a client with httpmock enabled
-func setupMockClient(t *testing.T) (*Service, string) {
+func setupMockClient(t *testing.T) (*Devices, string) {
 	// Create test logger
 	logger := zap.NewNop()
 
@@ -36,7 +36,7 @@ func setupMockClient(t *testing.T) (*Service, string) {
 	})
 
 	// Create devices service
-	return NewService(httpClient), baseURL
+	return NewDevices(httpClient), baseURL
 }
 
 func TestListDevices_Success(t *testing.T) {

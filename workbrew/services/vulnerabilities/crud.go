@@ -3,40 +3,42 @@ package vulnerabilities
 import (
 	"context"
 
-	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew/interfaces"
+	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew/client"
+	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew/constants"
+	"resty.dev/v3"
 )
 
-type (
-	// VulnerabilitiesServiceInterface defines the interface for vulnerabilities operations
+// VulnerabilitiesServiceInterface defines the interface for vulnerabilities operations
+//
+// Workbrew API docs: https://console.workbrew.com/documentation/api
+type VulnerabilitiesServiceInterface interface {
+	// ListVulnerabilities returns a list of Vulnerabilities
 	//
-	// Workbrew API docs: https://console.workbrew.com/documentation/api
-	VulnerabilitiesServiceInterface interface {
-		// ListVulnerabilities returns a list of Vulnerabilities
-		//
-		// Returns security vulnerabilities affecting installed formulae, including CVE IDs with CVSS scores,
-		// affected formula names, outdated devices, support status, and Homebrew core versions.
-		// May return 403 Forbidden on Free tier plans.
-		ListVulnerabilities(ctx context.Context) (*VulnerabilitiesResponse, *interfaces.Response, error)
+	// Returns security vulnerabilities affecting installed formulae, including CVE IDs with CVSS scores,
+	// affected formula names, outdated devices, support status, and Homebrew core versions.
+	// May return 403 Forbidden on Free tier plans.
+	ListVulnerabilities(ctx context.Context) (*VulnerabilitiesResponse, *resty.Response, error)
 
-		// ListVulnerabilitiesCSV returns a list of Vulnerabilities in CSV format
-		//
-		// Returns vulnerability data as CSV with columns: vulnerabilities, formula, outdated_devices, supported, homebrew_core_version.
-		ListVulnerabilitiesCSV(ctx context.Context) ([]byte, *interfaces.Response, error)
-	}
+	// ListVulnerabilitiesCSV returns a list of Vulnerabilities in CSV format
+	//
+	// Returns vulnerability data as CSV with columns: vulnerabilities, formula, outdated_devices, supported, homebrew_core_version.
+	ListVulnerabilitiesCSV(ctx context.Context) ([]byte, *resty.Response, error)
+}
 
-	// Service handles communication with the vulnerabilities
-	// related methods of the Workbrew API.
-	Service struct {
-		client interfaces.HTTPClient
-	}
-)
+// Vulnerabilities handles communication with the vulnerabilities
+// related methods of the Workbrew API.
+//
+// Workbrew API docs: https://console.workbrew.com/documentation/api
+type Vulnerabilities struct {
+	client client.Client
+}
 
-// Ensure Service implements VulnerabilitiesServiceInterface
-var _ VulnerabilitiesServiceInterface = (*Service)(nil)
+// Ensure Vulnerabilities implements VulnerabilitiesServiceInterface
+var _ VulnerabilitiesServiceInterface = (*Vulnerabilities)(nil)
 
-// NewService creates a new vulnerabilities service
-func NewService(client interfaces.HTTPClient) *Service {
-	return &Service{
+// NewVulnerabilities creates a new vulnerabilities service
+func NewVulnerabilities(client client.Client) *Vulnerabilities {
+	return &Vulnerabilities{
 		client: client,
 	}
 }
@@ -45,18 +47,13 @@ func NewService(client interfaces.HTTPClient) *Service {
 // URL: GET https://console.workbrew.com/workspaces/{workspace_name}/vulnerabilities.json
 //
 // Note: This endpoint may return 403 on Free tier plans
-func (s *Service) ListVulnerabilities(ctx context.Context) (*VulnerabilitiesResponse, *interfaces.Response, error) {
-	endpoint := EndpointVulnerabilitiesJSON
-
-	headers := map[string]string{
-		"Accept":       "application/json",
-		"Content-Type": "application/json",
-	}
-
-	queryParams := make(map[string]string)
-
+func (s *Vulnerabilities) ListVulnerabilities(ctx context.Context) (*VulnerabilitiesResponse, *resty.Response, error) {
 	var result VulnerabilitiesResponse
-	resp, err := s.client.Get(ctx, endpoint, queryParams, headers, &result)
+	resp, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.ApplicationJSON).
+		SetHeader("Content-Type", constants.ApplicationJSON).
+		SetResult(&result).
+		Get(constants.EndpointVulnerabilitiesJSON)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -68,16 +65,10 @@ func (s *Service) ListVulnerabilities(ctx context.Context) (*VulnerabilitiesResp
 // URL: GET https://console.workbrew.com/workspaces/{workspace_name}/vulnerabilities.csv
 //
 // Note: This endpoint may return 403 on Free tier plans
-func (s *Service) ListVulnerabilitiesCSV(ctx context.Context) ([]byte, *interfaces.Response, error) {
-	endpoint := EndpointVulnerabilitiesCSV
-
-	headers := map[string]string{
-		"Accept": "text/csv",
-	}
-
-	queryParams := make(map[string]string)
-
-	resp, csvData, err := s.client.GetBytes(ctx, endpoint, queryParams, headers)
+func (s *Vulnerabilities) ListVulnerabilitiesCSV(ctx context.Context) ([]byte, *resty.Response, error) {
+	resp, csvData, err := s.client.NewRequest(ctx).
+		SetHeader("Accept", constants.TextCSV).
+		GetBytes(constants.EndpointVulnerabilitiesCSV)
 	if err != nil {
 		return nil, resp, err
 	}

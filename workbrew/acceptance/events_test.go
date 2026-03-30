@@ -15,7 +15,7 @@ func TestAcceptance_Events_ListEvents(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := events.NewService(Client)
+		service := events.NewEvents(Client)
 
 		LogTestStage(t, "📋 List Events", "Testing ListEvents")
 
@@ -52,7 +52,7 @@ func TestAcceptance_Events_ListEventsCSV(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := events.NewService(Client)
+		service := events.NewEvents(Client)
 
 		LogTestStage(t, "📊 List Events CSV", "Testing ListEventsCSV")
 

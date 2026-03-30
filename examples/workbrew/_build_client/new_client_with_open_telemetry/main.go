@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew"
-	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew/client"
+	
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/sdk/trace"
@@ -87,13 +87,13 @@ func main() {
 		workspace,
 
 		// Enable structured logging
-		client.WithLogger(logger),
+		workbrew.WithLogger(logger),
 
 		// Enable OpenTelemetry tracing - this automatically instruments all HTTP calls
-		client.WithTracing(nil), // nil uses default config with global tracer provider
+		workbrew.WithTracing(nil), // nil uses default config with global tracer provider
 
 		// Or use custom tracing configuration:
-		// client.WithTracing(&client.OTelConfig{
+		// workbrew.WithTracing(&workbrew.OTelConfig{
 		//     TracerProvider: tracerProvider,
 		//     ServiceName:    "my-workbrew-app",
 		//     SpanNameFormatter: func(operation string, req *http.Request) string {

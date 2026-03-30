@@ -15,7 +15,7 @@ func TestAcceptance_Vulnerabilities_ListVulnerabilities(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := vulnerabilities.NewService(Client)
+		service := vulnerabilities.NewVulnerabilities(Client)
 
 		LogTestStage(t, "🔒 List Vulnerabilities", "Testing ListVulnerabilities")
 
@@ -54,7 +54,7 @@ func TestAcceptance_Vulnerabilities_ListVulnerabilitiesCSV(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := vulnerabilities.NewService(Client)
+		service := vulnerabilities.NewVulnerabilities(Client)
 
 		LogTestStage(t, "📊 List Vulnerabilities CSV", "Testing ListVulnerabilitiesCSV")
 

@@ -1,10 +1,11 @@
 package client
 
 import (
+	"context"
 	"fmt"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew/interfaces"
+	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew/constants"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )
@@ -50,7 +51,7 @@ func NewTransport(apiKey string, workspaceName string, options ...ClientOption) 
 	// Create auth config
 	authConfig := &AuthConfig{
 		APIKey:     apiKey,
-		APIVersion: DefaultAPIVersion,
+		APIVersion: constants.DefaultAPIVersion,
 	}
 
 	// Format: "go-api-sdk-workbrew/1.0.0; gzip"
@@ -132,7 +133,7 @@ func (t *Transport) SetWorkspace(workspaceName string) {
 // The query builder provides a fluent interface for adding parameters with type safety.
 //
 // Returns:
-//   - interfaces.ServiceQueryBuilder: A new query builder instance
+//   - *QueryBuilder: A new query builder instance
 //
 // Example:
 //
@@ -141,6 +142,64 @@ func (t *Transport) SetWorkspace(workspaceName string) {
 //	    AddInt("limit", 100).
 //	    AddBool("active", true).
 //	    Build()
-func (t *Transport) QueryBuilder() interfaces.ServiceQueryBuilder {
+func (t *Transport) QueryBuilder() *QueryBuilder {
 	return NewQueryBuilder()
+}
+
+// NewRequest returns a RequestBuilder for this transport. The service layer
+// uses it to construct the full request — headers, body, query params, result
+// target — before calling Get/Post/Put/Patch/Delete to execute it.
+func (t *Transport) NewRequest(ctx context.Context) *RequestBuilder {
+	req := t.client.R().SetContext(ctx)
+	// Apply global headers so per-request headers set via SetHeader can override them
+	for k, v := range t.globalHeaders {
+		if v != "" {
+			req.SetHeader(k, v)
+		}
+	}
+	return &RequestBuilder{
+		req:      req,
+		executor: t,
+	}
+}
+
+// execute implements requestExecutor for Transport.
+func (t *Transport) execute(req *resty.Request, method, path string) (*resty.Response, error) {
+	return t.executeRequest(req, method, path)
+}
+
+// executeGetBytes implements requestExecutor for Transport.
+// Returns raw response bytes without JSON unmarshaling or content-type validation,
+// which allows non-JSON responses such as CSV exports.
+func (t *Transport) executeGetBytes(req *resty.Request, path string) (*resty.Response, []byte, error) {
+	t.logger.Debug("Executing bytes request",
+		zap.String("method", "GET"),
+		zap.String("path", path))
+
+	resp, err := req.Execute("GET", path)
+	if err != nil {
+		t.logger.Error("Bytes request failed",
+			zap.String("path", path),
+			zap.Error(err))
+		return resp, nil, fmt.Errorf("request failed: %w", err)
+	}
+
+	if resp.IsError() {
+		return resp, nil, ParseErrorResponse(
+			resp.Bytes(),
+			resp.StatusCode(),
+			resp.Status(),
+			"GET",
+			path,
+			t.logger,
+		)
+	}
+
+	body := resp.Bytes()
+	t.logger.Debug("Bytes request completed successfully",
+		zap.String("path", path),
+		zap.Int("status_code", resp.StatusCode()),
+		zap.Int("content_length", len(body)))
+
+	return resp, body, nil
 }

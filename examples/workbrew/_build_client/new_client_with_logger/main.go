@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew"
-	"github.com/deploymenttheory/go-api-sdk-workbrew/workbrew/client"
+	
 	"go.uber.org/zap"
 )
 
@@ -54,23 +54,23 @@ func main() {
 		workspace,
 
 		// Structured logging for production observability
-		client.WithLogger(logger),
+		workbrew.WithLogger(logger),
 
 		// Custom timeout for slow networks or large operations
-		client.WithTimeout(60*time.Second),
+		workbrew.WithTimeout(60*time.Second),
 
 		// Retry configuration for better reliability
-		client.WithRetryCount(5),                    // Retry up to 5 times
-		client.WithRetryWaitTime(3*time.Second),     // Initial wait time
-		client.WithRetryMaxWaitTime(30*time.Second), // Maximum wait time
+		workbrew.WithRetryCount(5),                    // Retry up to 5 times
+		workbrew.WithRetryWaitTime(3*time.Second),     // Initial wait time
+		workbrew.WithRetryMaxWaitTime(30*time.Second), // Maximum wait time
 
 		// Add custom headers for request tracking
-		client.WithGlobalHeader("X-Application-Name", "MyDeviceManager"),
-		client.WithGlobalHeader("X-Application-Version", "1.0.0"),
-		client.WithGlobalHeader("X-Environment", "production"),
+		workbrew.WithGlobalHeader("X-Application-Name", "MyDeviceManager"),
+		workbrew.WithGlobalHeader("X-Application-Version", "1.0.0"),
+		workbrew.WithGlobalHeader("X-Environment", "production"),
 
 		// Uncomment to enable debug mode (only for development!)
-		// client.WithDebug(),
+		// workbrew.WithDebug(),
 	)
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)

@@ -15,7 +15,7 @@ func TestAcceptance_Casks_ListCasks(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := casks.NewService(Client)
+		service := casks.NewCasks(Client)
 
 		LogTestStage(t, "📦 List Casks", "Testing ListCasks")
 
@@ -58,7 +58,7 @@ func TestAcceptance_Casks_ListCasksCSV(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := casks.NewService(Client)
+		service := casks.NewCasks(Client)
 
 		LogTestStage(t, "📊 List Casks CSV", "Testing ListCasksCSV")
 
@@ -88,7 +88,7 @@ func TestAcceptance_Casks_ValidateFields(t *testing.T) {
 		ctx, cancel := NewContext()
 		defer cancel()
 
-		service := casks.NewService(Client)
+		service := casks.NewCasks(Client)
 
 		LogTestStage(t, "✅ Validate Fields", "Testing cask field validation")
 
