@@ -30,14 +30,14 @@ func setupMockClient(t *testing.T) (*BrewTaps, string) {
 	return NewBrewTaps(httpClient), baseURL
 }
 
-func TestListBrewTaps_Success(t *testing.T) {
+func TestListV0_Success(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.BrewTapsMock{}
 	mockHandler.RegisterMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListBrewTaps(ctx)
+	result, _, err := service.ListV0(ctx)
 
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -70,14 +70,14 @@ func TestListBrewTaps_Success(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListBrewTaps_Unauthorized(t *testing.T) {
+func TestListV0_Unauthorized(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.BrewTapsMock{}
 	mockHandler.RegisterErrorMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListBrewTaps(ctx)
+	result, _, err := service.ListV0(ctx)
 
 	require.Error(t, err)
 	assert.Nil(t, result)
@@ -86,14 +86,14 @@ func TestListBrewTaps_Unauthorized(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListBrewTapsCSV_Success(t *testing.T) {
+func TestListCSVV0_Success(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.BrewTapsMock{}
 	mockHandler.RegisterMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	csvData, _, err := service.ListBrewTapsCSV(ctx)
+	csvData, _, err := service.ListCSVV0(ctx)
 
 	require.NoError(t, err)
 	require.NotNil(t, csvData)
@@ -110,14 +110,14 @@ func TestListBrewTapsCSV_Success(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListBrewTapsCSV_Unauthorized(t *testing.T) {
+func TestListCSVV0_Unauthorized(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.BrewTapsMock{}
 	mockHandler.RegisterErrorMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListBrewTapsCSV(ctx)
+	result, _, err := service.ListCSVV0(ctx)
 
 	require.Error(t, err)
 	assert.Nil(t, result)

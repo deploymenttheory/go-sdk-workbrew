@@ -53,7 +53,7 @@ func main() {
 	// Use the client to make a simple API call
 	ctx := context.Background()
 
-	devices, resp, err := client.Devices.ListDevices(ctx)
+	devices, resp, err := client.Devices.ListV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list devices: %v", err)
 	}

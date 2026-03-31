@@ -39,14 +39,14 @@ func setupMockClient(t *testing.T) (*Devices, string) {
 	return NewDevices(httpClient), baseURL
 }
 
-func TestListDevices_Success(t *testing.T) {
+func TestListV0_Success(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.DevicesMock{}
 	mockHandler.RegisterMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListDevices(ctx)
+	result, _, err := service.ListV0(ctx)
 
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -76,14 +76,14 @@ func TestListDevices_Success(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListDevices_Unauthorized(t *testing.T) {
+func TestListV0_Unauthorized(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.DevicesMock{}
 	mockHandler.RegisterErrorMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListDevices(ctx)
+	result, _, err := service.ListV0(ctx)
 
 	require.Error(t, err)
 	assert.Nil(t, result)
@@ -92,14 +92,14 @@ func TestListDevices_Unauthorized(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListDevicesCSV_Success(t *testing.T) {
+func TestListCSVV0_Success(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.DevicesMock{}
 	mockHandler.RegisterMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListDevicesCSV(ctx)
+	result, _, err := service.ListCSVV0(ctx)
 
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -114,14 +114,14 @@ func TestListDevicesCSV_Success(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListDevicesCSV_Forbidden(t *testing.T) {
+func TestListCSVV0_Forbidden(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.DevicesMock{}
 	mockHandler.RegisterErrorMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListDevicesCSV(ctx)
+	result, _, err := service.ListCSVV0(ctx)
 
 	require.Error(t, err)
 	assert.Nil(t, result)

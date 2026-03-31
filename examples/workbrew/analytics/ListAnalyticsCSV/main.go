@@ -39,7 +39,7 @@ func main() {
 
 	// List analytics as CSV
 	ctx := context.Background()
-	csvData, _, err := workbrewClient.Analytics.ListAnalyticsCSV(ctx)
+	csvData, _, err := workbrewClient.Analytics.ListCSVV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list analytics CSV: %v", err)
 	}

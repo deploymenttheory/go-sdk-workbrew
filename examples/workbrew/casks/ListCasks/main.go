@@ -35,7 +35,7 @@ func main() {
 
 
 	ctx := context.Background()
-	casksList, _, err := workbrewClient.Casks.ListCasks(ctx)
+	casksList, _, err := workbrewClient.Casks.ListV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list casks: %v", err)
 	}

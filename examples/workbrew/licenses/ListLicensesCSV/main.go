@@ -35,7 +35,7 @@ func main() {
 
 
 	ctx := context.Background()
-	csvData, _, err := workbrewClient.Licenses.ListLicensesCSV(ctx)
+	csvData, _, err := workbrewClient.Licenses.ListCSVV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list licenses CSV: %v", err)
 	}

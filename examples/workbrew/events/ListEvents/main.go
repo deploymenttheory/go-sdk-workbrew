@@ -41,7 +41,7 @@ func main() {
 	}
 
 	ctx := context.Background()
-	eventsList, _, err := workbrewClient.Events.ListEvents(ctx, opts)
+	eventsList, _, err := workbrewClient.Events.ListV0(ctx, opts)
 	if err != nil {
 		log.Fatalf("Failed to list events: %v", err)
 	}

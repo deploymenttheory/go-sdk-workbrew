@@ -17,11 +17,11 @@ func TestAcceptance_Vulnerabilities_ListVulnerabilities(t *testing.T) {
 
 		service := vulnerabilities.NewVulnerabilities(Client)
 
-		LogTestStage(t, "🔒 List Vulnerabilities", "Testing ListVulnerabilities")
+		LogTestStage(t, "🔒 List Vulnerabilities", "Testing ListV0")
 
-		result, resp, err := service.ListVulnerabilities(ctx)
-		AssertNoError(t, err, "ListVulnerabilities should not return an error")
-		AssertNotNil(t, result, "ListVulnerabilities result should not be nil")
+		result, resp, err := service.ListV0(ctx)
+		AssertNoError(t, err, "ListV0 should not return an error")
+		AssertNotNil(t, result, "ListV0 result should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 
@@ -56,10 +56,10 @@ func TestAcceptance_Vulnerabilities_ListVulnerabilitiesCSV(t *testing.T) {
 
 		service := vulnerabilities.NewVulnerabilities(Client)
 
-		LogTestStage(t, "📊 List Vulnerabilities CSV", "Testing ListVulnerabilitiesCSV")
+		LogTestStage(t, "📊 List Vulnerabilities CSV", "Testing ListCSVV0")
 
-		csvData, resp, err := service.ListVulnerabilitiesCSV(ctx)
-		AssertNoError(t, err, "ListVulnerabilitiesCSV should not return an error")
+		csvData, resp, err := service.ListCSVV0(ctx)
+		AssertNoError(t, err, "ListCSVV0 should not return an error")
 		AssertNotNil(t, csvData, "CSV data should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")

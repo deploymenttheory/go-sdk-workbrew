@@ -30,14 +30,14 @@ func setupMockClient(t *testing.T) (*Licenses, string) {
 	return NewLicenses(httpClient), baseURL
 }
 
-func TestListLicenses_Success(t *testing.T) {
+func TestListV0_Success(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.LicensesMock{}
 	mockHandler.RegisterMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListLicenses(ctx)
+	result, _, err := service.ListV0(ctx)
 
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -65,14 +65,14 @@ func TestListLicenses_Success(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListLicenses_Unauthorized(t *testing.T) {
+func TestListV0_Unauthorized(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.LicensesMock{}
 	mockHandler.RegisterErrorMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListLicenses(ctx)
+	result, _, err := service.ListV0(ctx)
 
 	require.Error(t, err)
 	assert.Nil(t, result)
@@ -81,14 +81,14 @@ func TestListLicenses_Unauthorized(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListLicensesCSV_Success(t *testing.T) {
+func TestListCSVV0_Success(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.LicensesMock{}
 	mockHandler.RegisterMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	csvData, _, err := service.ListLicensesCSV(ctx)
+	csvData, _, err := service.ListCSVV0(ctx)
 
 	require.NoError(t, err)
 	require.NotNil(t, csvData)
@@ -107,14 +107,14 @@ func TestListLicensesCSV_Success(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListLicensesCSV_Unauthorized(t *testing.T) {
+func TestListCSVV0_Unauthorized(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.LicensesMock{}
 	mockHandler.RegisterErrorMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListLicensesCSV(ctx)
+	result, _, err := service.ListCSVV0(ctx)
 
 	require.Error(t, err)
 	assert.Nil(t, result)

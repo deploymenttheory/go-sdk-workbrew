@@ -35,7 +35,7 @@ func main() {
 
 
 	ctx := context.Background()
-	formulaeList, _, err := workbrewClient.Formulae.ListFormulae(ctx)
+	formulaeList, _, err := workbrewClient.Formulae.ListV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list formulae: %v", err)
 	}

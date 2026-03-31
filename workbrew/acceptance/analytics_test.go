@@ -19,7 +19,7 @@ func TestAcceptance_Analytics_ListAnalytics(t *testing.T) {
 
 		LogTestStage(t, "📈 List Analytics", "Testing ListAnalytics")
 
-		result, resp, err := service.ListAnalytics(ctx)
+		result, resp, err := service.ListV0(ctx)
 		AssertNoError(t, err, "ListAnalytics should not return an error")
 		AssertNotNil(t, result, "ListAnalytics result should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
@@ -56,7 +56,7 @@ func TestAcceptance_Analytics_ListAnalyticsCSV(t *testing.T) {
 
 		LogTestStage(t, "📊 List Analytics CSV", "Testing ListAnalyticsCSV")
 
-		csvData, resp, err := service.ListAnalyticsCSV(ctx)
+		csvData, resp, err := service.ListCSVV0(ctx)
 		AssertNoError(t, err, "ListAnalyticsCSV should not return an error")
 		AssertNotNil(t, csvData, "CSV data should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")

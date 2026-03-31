@@ -8,42 +8,22 @@ import (
 	"resty.dev/v3"
 )
 
-// DeviceGroupsServiceInterface defines the interface for device groups operations
-//
-// Workbrew API docs: https://console.workbrew.com/documentation/api
-type DeviceGroupsServiceInterface interface {
-	// ListDeviceGroups returns a list of Device Groups
+type (
+	// DeviceGroups handles communication with the device groups-related methods of the Workbrew API.
 	//
-	// Returns device groups with their IDs, names, and assigned device serial numbers.
-	ListDeviceGroups(ctx context.Context) (*DeviceGroupsResponse, *resty.Response, error)
-
-	// ListDeviceGroupsCSV returns a list of Device Groups in CSV format
-	//
-	// Returns device group data as CSV with columns: id, name, devices.
-	ListDeviceGroupsCSV(ctx context.Context) ([]byte, *resty.Response, error)
-}
-
-// DeviceGroups handles communication with the device groups
-// related methods of the Workbrew API.
-//
-// Workbrew API docs: https://console.workbrew.com/documentation/api
-type DeviceGroups struct {
-	client client.Client
-}
-
-// Ensure DeviceGroups implements DeviceGroupsServiceInterface
-var _ DeviceGroupsServiceInterface = (*DeviceGroups)(nil)
-
-// NewDeviceGroups creates a new device groups service
-func NewDeviceGroups(client client.Client) *DeviceGroups {
-	return &DeviceGroups{
-		client: client,
+	// Workbrew API docs: https://console.workbrew.com/documentation/api
+	DeviceGroups struct {
+		client client.Client
 	}
+)
+
+func NewDeviceGroups(client client.Client) *DeviceGroups {
+	return &DeviceGroups{client: client}
 }
 
-// ListDeviceGroups retrieves all device groups in JSON format
+// ListV0 retrieves all device groups in JSON format.
 // URL: GET https://console.workbrew.com/workspaces/{workspace_name}/device_groups.json
-func (s *DeviceGroups) ListDeviceGroups(ctx context.Context) (*DeviceGroupsResponse, *resty.Response, error) {
+func (s *DeviceGroups) ListV0(ctx context.Context) (*DeviceGroupsResponse, *resty.Response, error) {
 	var result DeviceGroupsResponse
 	resp, err := s.client.NewRequest(ctx).
 		SetHeader("Accept", constants.ApplicationJSON).
@@ -57,9 +37,9 @@ func (s *DeviceGroups) ListDeviceGroups(ctx context.Context) (*DeviceGroupsRespo
 	return &result, resp, nil
 }
 
-// ListDeviceGroupsCSV retrieves all device groups in CSV format
+// ListCSVV0 retrieves all device groups in CSV format.
 // URL: GET https://console.workbrew.com/workspaces/{workspace_name}/device_groups.csv
-func (s *DeviceGroups) ListDeviceGroupsCSV(ctx context.Context) ([]byte, *resty.Response, error) {
+func (s *DeviceGroups) ListCSVV0(ctx context.Context) ([]byte, *resty.Response, error) {
 	resp, csvData, err := s.client.NewRequest(ctx).
 		SetHeader("Accept", constants.TextCSV).
 		GetBytes(constants.EndpointDeviceGroupsCSV)

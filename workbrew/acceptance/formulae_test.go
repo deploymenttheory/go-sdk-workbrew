@@ -17,11 +17,11 @@ func TestAcceptance_Formulae_ListFormulae(t *testing.T) {
 
 		service := formulae.NewFormulae(Client)
 
-		LogTestStage(t, "🍺 List Formulae", "Testing ListFormulae")
+		LogTestStage(t, "🍺 List Formulae", "Testing ListV0")
 
-		result, resp, err := service.ListFormulae(ctx)
-		AssertNoError(t, err, "ListFormulae should not return an error")
-		AssertNotNil(t, result, "ListFormulae result should not be nil")
+		result, resp, err := service.ListV0(ctx)
+		AssertNoError(t, err, "ListV0 should not return an error")
+		AssertNotNil(t, result, "ListV0 result should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 
@@ -55,10 +55,10 @@ func TestAcceptance_Formulae_ListFormulaeCSV(t *testing.T) {
 
 		service := formulae.NewFormulae(Client)
 
-		LogTestStage(t, "📊 List Formulae CSV", "Testing ListFormulaeCSV")
+		LogTestStage(t, "📊 List Formulae CSV", "Testing ListCSVV0")
 
-		csvData, resp, err := service.ListFormulaeCSV(ctx)
-		AssertNoError(t, err, "ListFormulaeCSV should not return an error")
+		csvData, resp, err := service.ListCSVV0(ctx)
+		AssertNoError(t, err, "ListCSVV0 should not return an error")
 		AssertNotNil(t, csvData, "CSV data should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
@@ -87,9 +87,9 @@ func TestAcceptance_Formulae_ValidateFields(t *testing.T) {
 
 		LogTestStage(t, "✅ Validate Fields", "Testing formula field validation")
 
-		result, resp, err := service.ListFormulae(ctx)
-		AssertNoError(t, err, "ListFormulae should not return an error")
-		AssertNotNil(t, result, "ListFormulae result should not be nil")
+		result, resp, err := service.ListV0(ctx)
+		AssertNoError(t, err, "ListV0 should not return an error")
+		AssertNotNil(t, result, "ListV0 result should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 
 		if len(*result) == 0 {

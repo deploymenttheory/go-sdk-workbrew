@@ -34,7 +34,7 @@ func main() {
 	}
 
 	ctx := context.Background()
-	brewfilesList, _, err := workbrewClient.Brewfiles.ListBrewfiles(ctx)
+	brewfilesList, _, err := workbrewClient.Brewfiles.ListV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list brewfiles: %v", err)
 	}

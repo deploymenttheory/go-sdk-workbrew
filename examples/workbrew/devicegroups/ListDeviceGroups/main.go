@@ -35,7 +35,7 @@ func main() {
 
 
 	ctx := context.Background()
-	groups, _, err := workbrewClient.DeviceGroups.ListDeviceGroups(ctx)
+	groups, _, err := workbrewClient.DeviceGroups.ListV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list device groups: %v", err)
 	}

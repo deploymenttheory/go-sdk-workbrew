@@ -17,11 +17,11 @@ func TestAcceptance_DeviceGroups_ListDeviceGroups(t *testing.T) {
 
 		service := devicegroups.NewDeviceGroups(Client)
 
-		LogTestStage(t, "👥 List Groups", "Testing ListDeviceGroups")
+		LogTestStage(t, "👥 List Groups", "Testing ListV0")
 
-		result, resp, err := service.ListDeviceGroups(ctx)
-		AssertNoError(t, err, "ListDeviceGroups should not return an error")
-		AssertNotNil(t, result, "ListDeviceGroups result should not be nil")
+		result, resp, err := service.ListV0(ctx)
+		AssertNoError(t, err, "ListV0 should not return an error")
+		AssertNotNil(t, result, "ListV0 result should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 
@@ -53,10 +53,10 @@ func TestAcceptance_DeviceGroups_ListDeviceGroupsCSV(t *testing.T) {
 
 		service := devicegroups.NewDeviceGroups(Client)
 
-		LogTestStage(t, "📊 List Groups CSV", "Testing ListDeviceGroupsCSV")
+		LogTestStage(t, "📊 List Groups CSV", "Testing ListCSVV0")
 
-		csvData, resp, err := service.ListDeviceGroupsCSV(ctx)
-		AssertNoError(t, err, "ListDeviceGroupsCSV should not return an error")
+		csvData, resp, err := service.ListCSVV0(ctx)
+		AssertNoError(t, err, "ListCSVV0 should not return an error")
 		AssertNotNil(t, csvData, "CSV data should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
@@ -85,9 +85,9 @@ func TestAcceptance_DeviceGroups_ValidateFields(t *testing.T) {
 
 		LogTestStage(t, "✅ Validate Fields", "Testing device group field validation")
 
-		result, resp, err := service.ListDeviceGroups(ctx)
-		AssertNoError(t, err, "ListDeviceGroups should not return an error")
-		AssertNotNil(t, result, "ListDeviceGroups result should not be nil")
+		result, resp, err := service.ListV0(ctx)
+		AssertNoError(t, err, "ListV0 should not return an error")
+		AssertNotNil(t, result, "ListV0 result should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 
 		if len(*result) == 0 {

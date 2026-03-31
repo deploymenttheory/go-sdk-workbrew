@@ -41,7 +41,7 @@ func main() {
 	}
 
 	ctx := context.Background()
-	csvData, _, err := workbrewClient.Events.ListEventsCSV(ctx, opts)
+	csvData, _, err := workbrewClient.Events.ListCSVV0(ctx, opts)
 	if err != nil {
 		log.Fatalf("Failed to list events CSV: %v", err)
 	}

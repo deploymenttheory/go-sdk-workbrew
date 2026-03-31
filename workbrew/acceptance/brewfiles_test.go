@@ -19,11 +19,11 @@ func TestAcceptance_Brewfiles_ListBrewfiles(t *testing.T) {
 
 		service := brewfiles.NewBrewfiles(Client)
 
-		LogTestStage(t, "📝 List Brewfiles", "Testing ListBrewfiles")
+		LogTestStage(t, "📝 List Brewfiles", "Testing ListV0")
 
-		result, resp, err := service.ListBrewfiles(ctx)
-		AssertNoError(t, err, "ListBrewfiles should not return an error")
-		AssertNotNil(t, result, "ListBrewfiles result should not be nil")
+		result, resp, err := service.ListV0(ctx)
+		AssertNoError(t, err, "ListV0 should not return an error")
+		AssertNotNil(t, result, "ListV0 result should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 
@@ -56,10 +56,10 @@ func TestAcceptance_Brewfiles_ListBrewfilesCSV(t *testing.T) {
 
 		service := brewfiles.NewBrewfiles(Client)
 
-		LogTestStage(t, "📊 List Brewfiles CSV", "Testing ListBrewfilesCSV")
+		LogTestStage(t, "📊 List Brewfiles CSV", "Testing ListCSVV0")
 
-		csvData, resp, err := service.ListBrewfilesCSV(ctx)
-		AssertNoError(t, err, "ListBrewfilesCSV should not return an error")
+		csvData, resp, err := service.ListCSVV0(ctx)
+		AssertNoError(t, err, "ListCSVV0 should not return an error")
 		AssertNotNil(t, csvData, "CSV data should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
@@ -101,9 +101,9 @@ brew "wget"
 			Content: testContent,
 		}
 
-		createResult, createResp, createErr := service.CreateBrewfile(ctx, createRequest)
-		AssertNoError(t, createErr, "CreateBrewfile should not return an error")
-		AssertNotNil(t, createResult, "CreateBrewfile result should not be nil")
+		createResult, createResp, createErr := service.CreateV0(ctx, createRequest)
+		AssertNoError(t, createErr, "CreateV0 should not return an error")
+		AssertNotNil(t, createResult, "CreateV0 result should not be nil")
 		assert.Equal(t, 201, createResp.StatusCode, "Status code should be 201 for creation")
 
 		LogTestSuccess(t, "Brewfile created: %s", testLabel)
@@ -114,7 +114,7 @@ brew "wget"
 			cleanupCtx, cleanupCancel := NewContext()
 			defer cleanupCancel()
 
-			_, _, cleanupErr := service.DeleteBrewfile(cleanupCtx, testLabel)
+			_, _, cleanupErr := service.DeleteByLabelV0(cleanupCtx, testLabel)
 			if cleanupErr != nil {
 				LogTestWarning(t, "Failed to cleanup brewfile %s: %v", testLabel, cleanupErr)
 			} else {
@@ -125,8 +125,8 @@ brew "wget"
 		// Step 2: List brewfiles and verify it exists
 		LogTestStage(t, "📋 Verify", "Verifying brewfile exists in list")
 
-		listResult, listResp, listErr := service.ListBrewfiles(ctx)
-		AssertNoError(t, listErr, "ListBrewfiles should not return an error")
+		listResult, listResp, listErr := service.ListV0(ctx)
+		AssertNoError(t, listErr, "ListV0 should not return an error")
 		assert.Equal(t, 200, listResp.StatusCode, "Status code should be 200")
 
 		found := false
@@ -152,9 +152,9 @@ brew "curl"
 			Content: updatedContent,
 		}
 
-		updateResult, updateResp, updateErr := service.UpdateBrewfile(ctx, testLabel, updateRequest)
-		AssertNoError(t, updateErr, "UpdateBrewfile should not return an error")
-		AssertNotNil(t, updateResult, "UpdateBrewfile result should not be nil")
+		updateResult, updateResp, updateErr := service.UpdateByLabelV0(ctx, testLabel, updateRequest)
+		AssertNoError(t, updateErr, "UpdateByLabelV0 should not return an error")
+		AssertNotNil(t, updateResult, "UpdateByLabelV0 result should not be nil")
 		assert.Equal(t, 200, updateResp.StatusCode, "Status code should be 200 for update")
 
 		LogTestSuccess(t, "Brewfile updated")
@@ -162,8 +162,8 @@ brew "curl"
 		// Step 4: Verify update
 		LogTestStage(t, "🔍 Verify Update", "Verifying brewfile content updated")
 
-		listResultAfterUpdate, _, listErrAfterUpdate := service.ListBrewfiles(ctx)
-		AssertNoError(t, listErrAfterUpdate, "ListBrewfiles should not return an error")
+		listResultAfterUpdate, _, listErrAfterUpdate := service.ListV0(ctx)
+		AssertNoError(t, listErrAfterUpdate, "ListV0 should not return an error")
 
 		foundUpdated := false
 		for _, bf := range *listResultAfterUpdate {
@@ -179,9 +179,9 @@ brew "curl"
 		// Step 5: Delete brewfile (will also be cleaned up, but test explicit delete)
 		LogTestStage(t, "🗑️  Delete", "Deleting brewfile")
 
-		deleteResult, deleteResp, deleteErr := service.DeleteBrewfile(ctx, testLabel)
-		AssertNoError(t, deleteErr, "DeleteBrewfile should not return an error")
-		AssertNotNil(t, deleteResult, "DeleteBrewfile result should not be nil")
+		deleteResult, deleteResp, deleteErr := service.DeleteByLabelV0(ctx, testLabel)
+		AssertNoError(t, deleteErr, "DeleteByLabelV0 should not return an error")
+		AssertNotNil(t, deleteResult, "DeleteByLabelV0 result should not be nil")
 		assert.Equal(t, 200, deleteResp.StatusCode, "Status code should be 200 for deletion")
 
 		LogTestSuccess(t, "Brewfile deleted")
@@ -189,8 +189,8 @@ brew "curl"
 		// Step 6: Verify deletion
 		LogTestStage(t, "✅ Verify Deletion", "Verifying brewfile removed")
 
-		listResultAfterDelete, _, listErrAfterDelete := service.ListBrewfiles(ctx)
-		AssertNoError(t, listErrAfterDelete, "ListBrewfiles should not return an error")
+		listResultAfterDelete, _, listErrAfterDelete := service.ListV0(ctx)
+		AssertNoError(t, listErrAfterDelete, "ListV0 should not return an error")
 
 		foundAfterDelete := false
 		for _, bf := range *listResultAfterDelete {
@@ -219,11 +219,11 @@ func TestAcceptance_Brewfiles_ListBrewfileRuns(t *testing.T) {
 
 		service := brewfiles.NewBrewfiles(Client)
 
-		LogTestStage(t, "🏃 List Runs", "Testing ListBrewfileRuns for: %s", Config.KnownBrewfileName)
+		LogTestStage(t, "🏃 List Runs", "Testing ListRunsByLabelV0 for: %s", Config.KnownBrewfileName)
 
-		result, resp, err := service.ListBrewfileRuns(ctx, Config.KnownBrewfileName)
-		AssertNoError(t, err, "ListBrewfileRuns should not return an error")
-		AssertNotNil(t, result, "ListBrewfileRuns result should not be nil")
+		result, resp, err := service.ListRunsByLabelV0(ctx, Config.KnownBrewfileName)
+		AssertNoError(t, err, "ListRunsByLabelV0 should not return an error")
+		AssertNotNil(t, result, "ListRunsByLabelV0 result should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 

@@ -46,7 +46,7 @@ func main() {
 	}
 
 	ctx := context.Background()
-	response, _, err := workbrewClient.BrewCommands.CreateBrewCommand(ctx, request)
+	response, _, err := workbrewClient.BrewCommands.CreateV0(ctx, request)
 	if err != nil {
 		log.Fatalf("Failed to create brew command: %v", err)
 	}

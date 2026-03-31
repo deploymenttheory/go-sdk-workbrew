@@ -35,7 +35,7 @@ func main() {
 	}
 
 	ctx := context.Background()
-	csvData, _, err := workbrewClient.Brewfiles.ListBrewfileRunsCSV(ctx, brewfileLabel)
+	csvData, _, err := workbrewClient.Brewfiles.ListRunsByLabelCSVV0(ctx, brewfileLabel)
 	if err != nil {
 		log.Fatalf("Failed to list brewfile runs CSV: %v", err)
 	}

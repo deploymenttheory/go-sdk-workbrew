@@ -35,7 +35,7 @@ func main() {
 
 
 	ctx := context.Background()
-	csvData, _, err := workbrewClient.BrewCommands.ListBrewCommandsCSV(ctx)
+	csvData, _, err := workbrewClient.BrewCommands.ListCSVV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list brew commands CSV: %v", err)
 	}

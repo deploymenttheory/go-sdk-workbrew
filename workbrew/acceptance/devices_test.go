@@ -17,11 +17,11 @@ func TestAcceptance_Devices_ListDevices(t *testing.T) {
 
 		service := devices.NewDevices(Client)
 
-		LogTestStage(t, "🖥️  List Devices", "Testing ListDevices")
+		LogTestStage(t, "🖥️  List Devices", "Testing ListV0")
 
-		result, resp, err := service.ListDevices(ctx)
-		AssertNoError(t, err, "ListDevices should not return an error")
-		AssertNotNil(t, result, "ListDevices result should not be nil")
+		result, resp, err := service.ListV0(ctx)
+		AssertNoError(t, err, "ListV0 should not return an error")
+		AssertNotNil(t, result, "ListV0 result should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 
@@ -54,10 +54,10 @@ func TestAcceptance_Devices_ListDevicesCSV(t *testing.T) {
 
 		service := devices.NewDevices(Client)
 
-		LogTestStage(t, "📊 List Devices CSV", "Testing ListDevicesCSV")
+		LogTestStage(t, "📊 List Devices CSV", "Testing ListCSVV0")
 
-		csvData, resp, err := service.ListDevicesCSV(ctx)
-		AssertNoError(t, err, "ListDevicesCSV should not return an error")
+		csvData, resp, err := service.ListCSVV0(ctx)
+		AssertNoError(t, err, "ListCSVV0 should not return an error")
 		AssertNotNil(t, csvData, "CSV data should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
@@ -86,9 +86,9 @@ func TestAcceptance_Devices_ListDevices_ValidateFields(t *testing.T) {
 
 		LogTestStage(t, "✅ Validate Fields", "Testing device field validation")
 
-		result, resp, err := service.ListDevices(ctx)
-		AssertNoError(t, err, "ListDevices should not return an error")
-		AssertNotNil(t, result, "ListDevices result should not be nil")
+		result, resp, err := service.ListV0(ctx)
+		AssertNoError(t, err, "ListV0 should not return an error")
+		AssertNotNil(t, result, "ListV0 result should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 
 		if len(*result) == 0 {
@@ -119,14 +119,6 @@ func TestAcceptance_Devices_ListDevices_ValidateFields(t *testing.T) {
 
 		LogTestSuccess(t, "Device fields validated successfully")
 	})
-}
-
-// stringOrEmpty returns the string value or empty string if nil
-func stringOrEmpty(s *string) string {
-	if s == nil {
-		return ""
-	}
-	return *s
 }
 
 // min returns the minimum of two integers

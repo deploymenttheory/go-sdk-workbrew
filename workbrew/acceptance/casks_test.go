@@ -17,11 +17,11 @@ func TestAcceptance_Casks_ListCasks(t *testing.T) {
 
 		service := casks.NewCasks(Client)
 
-		LogTestStage(t, "📦 List Casks", "Testing ListCasks")
+		LogTestStage(t, "📦 List Casks", "Testing ListV0")
 
-		result, resp, err := service.ListCasks(ctx)
-		AssertNoError(t, err, "ListCasks should not return an error")
-		AssertNotNil(t, result, "ListCasks result should not be nil")
+		result, resp, err := service.ListV0(ctx)
+		AssertNoError(t, err, "ListV0 should not return an error")
+		AssertNotNil(t, result, "ListV0 result should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 
@@ -60,10 +60,10 @@ func TestAcceptance_Casks_ListCasksCSV(t *testing.T) {
 
 		service := casks.NewCasks(Client)
 
-		LogTestStage(t, "📊 List Casks CSV", "Testing ListCasksCSV")
+		LogTestStage(t, "📊 List Casks CSV", "Testing ListCSVV0")
 
-		csvData, resp, err := service.ListCasksCSV(ctx)
-		AssertNoError(t, err, "ListCasksCSV should not return an error")
+		csvData, resp, err := service.ListCSVV0(ctx)
+		AssertNoError(t, err, "ListCSVV0 should not return an error")
 		AssertNotNil(t, csvData, "CSV data should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
@@ -92,9 +92,9 @@ func TestAcceptance_Casks_ValidateFields(t *testing.T) {
 
 		LogTestStage(t, "✅ Validate Fields", "Testing cask field validation")
 
-		result, resp, err := service.ListCasks(ctx)
-		AssertNoError(t, err, "ListCasks should not return an error")
-		AssertNotNil(t, result, "ListCasks result should not be nil")
+		result, resp, err := service.ListV0(ctx)
+		AssertNoError(t, err, "ListV0 should not return an error")
+		AssertNotNil(t, result, "ListV0 result should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 
 		if len(*result) == 0 {

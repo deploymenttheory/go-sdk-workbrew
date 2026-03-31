@@ -118,7 +118,7 @@ func main() {
 	// - All OpenTelemetry semantic conventions
 	logger.Info("Fetching brewfiles")
 
-	brewfiles, resp, err := workbrewClient.Brewfiles.ListBrewfiles(ctx)
+	brewfiles, resp, err := workbrewClient.Brewfiles.ListV0(ctx)
 	if err != nil {
 		logger.Error("Brewfile list failed",
 			zap.Error(err),

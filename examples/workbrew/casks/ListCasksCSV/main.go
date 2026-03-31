@@ -35,7 +35,7 @@ func main() {
 
 
 	ctx := context.Background()
-	csvData, _, err := workbrewClient.Casks.ListCasksCSV(ctx)
+	csvData, _, err := workbrewClient.Casks.ListCSVV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list casks CSV: %v", err)
 	}

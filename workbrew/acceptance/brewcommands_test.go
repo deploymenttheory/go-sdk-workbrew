@@ -17,11 +17,11 @@ func TestAcceptance_BrewCommands_ListBrewCommands(t *testing.T) {
 
 		service := brewcommands.NewBrewCommands(Client)
 
-		LogTestStage(t, "⚡ List Commands", "Testing ListBrewCommands")
+		LogTestStage(t, "⚡ List Commands", "Testing ListV0")
 
-		result, resp, err := service.ListBrewCommands(ctx)
-		AssertNoError(t, err, "ListBrewCommands should not return an error")
-		AssertNotNil(t, result, "ListBrewCommands result should not be nil")
+		result, resp, err := service.ListV0(ctx)
+		AssertNoError(t, err, "ListV0 should not return an error")
+		AssertNotNil(t, result, "ListV0 result should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 
@@ -55,10 +55,10 @@ func TestAcceptance_BrewCommands_ListBrewCommandsCSV(t *testing.T) {
 
 		service := brewcommands.NewBrewCommands(Client)
 
-		LogTestStage(t, "📊 List Commands CSV", "Testing ListBrewCommandsCSV")
+		LogTestStage(t, "📊 List Commands CSV", "Testing ListCSVV0")
 
-		csvData, resp, err := service.ListBrewCommandsCSV(ctx)
-		AssertNoError(t, err, "ListBrewCommandsCSV should not return an error")
+		csvData, resp, err := service.ListCSVV0(ctx)
+		AssertNoError(t, err, "ListCSVV0 should not return an error")
 		AssertNotNil(t, csvData, "CSV data should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
@@ -100,9 +100,9 @@ func TestAcceptance_BrewCommands_CreateCommand(t *testing.T) {
 			DeviceIDs: &Config.KnownDeviceSerial,
 		}
 
-		result, resp, err := service.CreateBrewCommand(ctx, createRequest)
-		AssertNoError(t, err, "CreateBrewCommand should not return an error")
-		AssertNotNil(t, result, "CreateBrewCommand result should not be nil")
+		result, resp, err := service.CreateV0(ctx, createRequest)
+		AssertNoError(t, err, "CreateV0 should not return an error")
+		AssertNotNil(t, result, "CreateV0 result should not be nil")
 		assert.Equal(t, 201, resp.StatusCode, "Status code should be 201 for creation")
 
 		// Validate response

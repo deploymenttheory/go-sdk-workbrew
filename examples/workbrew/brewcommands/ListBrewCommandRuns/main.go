@@ -36,7 +36,7 @@ func main() {
 
 
 	ctx := context.Background()
-	runs, _, err := workbrewClient.BrewCommands.ListBrewCommandRuns(ctx, brewCommandLabel)
+	runs, _, err := workbrewClient.BrewCommands.ListRunsByLabelV0(ctx, brewCommandLabel)
 	if err != nil {
 		log.Fatalf("Failed to list brew command runs: %v", err)
 	}

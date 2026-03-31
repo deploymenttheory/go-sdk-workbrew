@@ -17,11 +17,11 @@ func TestAcceptance_Licenses_ListLicenses(t *testing.T) {
 
 		service := licenses.NewLicenses(Client)
 
-		LogTestStage(t, "📜 List Licenses", "Testing ListLicenses")
+		LogTestStage(t, "📜 List Licenses", "Testing ListV0")
 
-		result, resp, err := service.ListLicenses(ctx)
-		AssertNoError(t, err, "ListLicenses should not return an error")
-		AssertNotNil(t, result, "ListLicenses result should not be nil")
+		result, resp, err := service.ListV0(ctx)
+		AssertNoError(t, err, "ListV0 should not return an error")
+		AssertNotNil(t, result, "ListV0 result should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 
@@ -54,10 +54,10 @@ func TestAcceptance_Licenses_ListLicensesCSV(t *testing.T) {
 
 		service := licenses.NewLicenses(Client)
 
-		LogTestStage(t, "📊 List Licenses CSV", "Testing ListLicensesCSV")
+		LogTestStage(t, "📊 List Licenses CSV", "Testing ListCSVV0")
 
-		csvData, resp, err := service.ListLicensesCSV(ctx)
-		AssertNoError(t, err, "ListLicensesCSV should not return an error")
+		csvData, resp, err := service.ListCSVV0(ctx)
+		AssertNoError(t, err, "ListCSVV0 should not return an error")
 		AssertNotNil(t, csvData, "CSV data should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")

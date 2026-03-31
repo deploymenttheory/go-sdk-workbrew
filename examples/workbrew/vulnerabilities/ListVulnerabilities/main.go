@@ -35,7 +35,7 @@ func main() {
 
 
 	ctx := context.Background()
-	vulnList, _, err := workbrewClient.Vulnerabilities.ListVulnerabilities(ctx)
+	vulnList, _, err := workbrewClient.Vulnerabilities.ListV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list vulnerabilities: %v", err)
 	}

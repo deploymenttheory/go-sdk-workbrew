@@ -34,7 +34,7 @@ func main() {
 	}
 
 	ctx := context.Background()
-	devicesList, _, err := workbrewClient.Devices.ListDevices(ctx)
+	devicesList, _, err := workbrewClient.Devices.ListV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list devices: %v", err)
 	}

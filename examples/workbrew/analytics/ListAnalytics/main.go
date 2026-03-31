@@ -37,7 +37,7 @@ func main() {
 
 	// List analytics using the built-in Analytics service
 	ctx := context.Background()
-	analyticsData, _, err := workbrewClient.Analytics.ListAnalytics(ctx)
+	analyticsData, _, err := workbrewClient.Analytics.ListV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list analytics: %v", err)
 	}

@@ -39,14 +39,14 @@ func setupMockClient(t *testing.T) (*BrewCommands, string) {
 	return NewBrewCommands(httpClient), baseURL
 }
 
-func TestListBrewCommands_Success(t *testing.T) {
+func TestListV0_Success(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.BrewCommandsMock{}
 	mockHandler.RegisterMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListBrewCommands(ctx)
+	result, _, err := service.ListV0(ctx)
 
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -70,14 +70,14 @@ func TestListBrewCommands_Success(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListBrewCommands_Unauthorized(t *testing.T) {
+func TestListV0_Unauthorized(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.BrewCommandsMock{}
 	mockHandler.RegisterErrorMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListBrewCommands(ctx)
+	result, _, err := service.ListV0(ctx)
 
 	require.Error(t, err)
 	assert.Nil(t, result)
@@ -86,7 +86,7 @@ func TestListBrewCommands_Unauthorized(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestCreateBrewCommand_Success(t *testing.T) {
+func TestCreateV0_Success(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.BrewCommandsMock{}
 	mockHandler.RegisterMocks(baseURL)
@@ -97,7 +97,7 @@ func TestCreateBrewCommand_Success(t *testing.T) {
 		Arguments: "install wget",
 	}
 
-	result, _, err := service.CreateBrewCommand(ctx, request)
+	result, _, err := service.CreateV0(ctx, request)
 
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -106,7 +106,7 @@ func TestCreateBrewCommand_Success(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestCreateBrewCommand_FreeTier(t *testing.T) {
+func TestCreateV0_FreeTier(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.BrewCommandsMock{}
 	mockHandler.RegisterErrorMocks(baseURL)
@@ -117,7 +117,7 @@ func TestCreateBrewCommand_FreeTier(t *testing.T) {
 		Arguments: "install wget",
 	}
 
-	result, _, err := service.CreateBrewCommand(ctx, request)
+	result, _, err := service.CreateV0(ctx, request)
 
 	require.Error(t, err)
 	assert.Nil(t, result)

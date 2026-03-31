@@ -17,11 +17,11 @@ func TestAcceptance_Events_ListEvents(t *testing.T) {
 
 		service := events.NewEvents(Client)
 
-		LogTestStage(t, "📋 List Events", "Testing ListEvents")
+		LogTestStage(t, "📋 List Events", "Testing ListV0")
 
-		result, resp, err := service.ListEvents(ctx, nil)
-		AssertNoError(t, err, "ListEvents should not return an error")
-		AssertNotNil(t, result, "ListEvents result should not be nil")
+		result, resp, err := service.ListV0(ctx, nil)
+		AssertNoError(t, err, "ListV0 should not return an error")
+		AssertNotNil(t, result, "ListV0 result should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 
@@ -54,10 +54,10 @@ func TestAcceptance_Events_ListEventsCSV(t *testing.T) {
 
 		service := events.NewEvents(Client)
 
-		LogTestStage(t, "📊 List Events CSV", "Testing ListEventsCSV")
+		LogTestStage(t, "📊 List Events CSV", "Testing ListCSVV0")
 
-		csvData, resp, err := service.ListEventsCSV(ctx, nil)
-		AssertNoError(t, err, "ListEventsCSV should not return an error")
+		csvData, resp, err := service.ListCSVV0(ctx, nil)
+		AssertNoError(t, err, "ListCSVV0 should not return an error")
 		AssertNotNil(t, csvData, "CSV data should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")

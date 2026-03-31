@@ -35,7 +35,7 @@ func main() {
 	}
 
 	ctx := context.Background()
-	response, _, err := workbrewClient.Brewfiles.DeleteBrewfile(ctx, brewfileLabel)
+	response, _, err := workbrewClient.Brewfiles.DeleteByLabelV0(ctx, brewfileLabel)
 	if err != nil {
 		log.Fatalf("Failed to delete brewfile: %v", err)
 	}

@@ -86,7 +86,7 @@ func main() {
 
 	logger.Info("Fetching device groups")
 
-	deviceGroups, resp, err := workbrewClient.DeviceGroups.ListDeviceGroups(ctx)
+	deviceGroups, resp, err := workbrewClient.DeviceGroups.ListV0(ctx)
 	if err != nil {
 		logger.Error("Failed to list device groups",
 			zap.Error(err),

@@ -17,11 +17,11 @@ func TestAcceptance_BrewConfigurations_ListBrewConfigurations(t *testing.T) {
 
 		service := brewconfigurations.NewBrewConfigurations(Client)
 
-		LogTestStage(t, "⚙️  List Configurations", "Testing ListBrewConfigurations")
+		LogTestStage(t, "⚙️  List Configurations", "Testing ListV0")
 
-		result, resp, err := service.ListBrewConfigurations(ctx)
-		AssertNoError(t, err, "ListBrewConfigurations should not return an error")
-		AssertNotNil(t, result, "ListBrewConfigurations result should not be nil")
+		result, resp, err := service.ListV0(ctx)
+		AssertNoError(t, err, "ListV0 should not return an error")
+		AssertNotNil(t, result, "ListV0 result should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")
 
@@ -54,10 +54,10 @@ func TestAcceptance_BrewConfigurations_ListBrewConfigurationsCSV(t *testing.T) {
 
 		service := brewconfigurations.NewBrewConfigurations(Client)
 
-		LogTestStage(t, "📊 List Configurations CSV", "Testing ListBrewConfigurationsCSV")
+		LogTestStage(t, "📊 List Configurations CSV", "Testing ListCSVV0")
 
-		csvData, resp, err := service.ListBrewConfigurationsCSV(ctx)
-		AssertNoError(t, err, "ListBrewConfigurationsCSV should not return an error")
+		csvData, resp, err := service.ListCSVV0(ctx)
+		AssertNoError(t, err, "ListCSVV0 should not return an error")
 		AssertNotNil(t, csvData, "CSV data should not be nil")
 		AssertNotNil(t, resp, "Response should not be nil")
 		assert.Equal(t, 200, resp.StatusCode, "Status code should be 200")

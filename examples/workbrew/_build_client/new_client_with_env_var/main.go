@@ -46,7 +46,7 @@ func main() {
 	// Use the client to make an API call
 	ctx := context.Background()
 
-	formulae, resp, err := client.Formulae.ListFormulae(ctx)
+	formulae, resp, err := client.Formulae.ListV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list formulae: %v", err)
 	}

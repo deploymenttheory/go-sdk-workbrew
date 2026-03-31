@@ -39,14 +39,14 @@ func setupMockClient(t *testing.T) (*Events, string) {
 	return NewEvents(httpClient), baseURL
 }
 
-func TestListEvents_Success_NoFilter(t *testing.T) {
+func TestListV0_Success_NoFilter(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.EventsMock{}
 	mockHandler.RegisterMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListEvents(ctx, nil) // Test nil options
+	result, _, err := service.ListV0(ctx, nil) // Test nil options
 
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -62,7 +62,7 @@ func TestListEvents_Success_NoFilter(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListEvents_Success_WithFilter(t *testing.T) {
+func TestListV0_Success_WithFilter(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.EventsMock{}
 	mockHandler.RegisterMocks(baseURL)
@@ -71,7 +71,7 @@ func TestListEvents_Success_WithFilter(t *testing.T) {
 	ctx := context.Background()
 
 	// Test with user filter
-	result, _, err := service.ListEvents(ctx, &RequestQueryOptions{
+	result, _, err := service.ListV0(ctx, &RequestQueryOptions{
 		Filter: "user",
 	})
 
@@ -82,7 +82,7 @@ func TestListEvents_Success_WithFilter(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListEvents_Success_EmptyOptions(t *testing.T) {
+func TestListV0_Success_EmptyOptions(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.EventsMock{}
 	mockHandler.RegisterMocks(baseURL)
@@ -91,7 +91,7 @@ func TestListEvents_Success_EmptyOptions(t *testing.T) {
 	ctx := context.Background()
 
 	// Test with empty options struct
-	result, _, err := service.ListEvents(ctx, &RequestQueryOptions{})
+	result, _, err := service.ListV0(ctx, &RequestQueryOptions{})
 
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -100,14 +100,14 @@ func TestListEvents_Success_EmptyOptions(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListEvents_Unauthorized(t *testing.T) {
+func TestListV0_Unauthorized(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.EventsMock{}
 	mockHandler.RegisterErrorMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListEvents(ctx, nil)
+	result, _, err := service.ListV0(ctx, nil)
 
 	require.Error(t, err)
 	assert.Nil(t, result)
@@ -116,14 +116,14 @@ func TestListEvents_Unauthorized(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListEventsCSV_Success_NoOptions(t *testing.T) {
+func TestListCSVV0_Success_NoOptions(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.EventsMock{}
 	mockHandler.RegisterMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	csvData, _, err := service.ListEventsCSV(ctx, nil)
+	csvData, _, err := service.ListCSVV0(ctx, nil)
 
 	require.NoError(t, err)
 	require.NotNil(t, csvData)
@@ -136,14 +136,14 @@ func TestListEventsCSV_Success_NoOptions(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListEventsCSV_Success_WithFilter(t *testing.T) {
+func TestListCSVV0_Success_WithFilter(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.EventsMock{}
 	mockHandler.RegisterMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	csvData, _, err := service.ListEventsCSV(ctx, &RequestQueryOptions{
+	csvData, _, err := service.ListCSVV0(ctx, &RequestQueryOptions{
 		Filter: "system",
 	})
 
@@ -154,14 +154,14 @@ func TestListEventsCSV_Success_WithFilter(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListEventsCSV_Success_WithDownload(t *testing.T) {
+func TestListCSVV0_Success_WithDownload(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.EventsMock{}
 	mockHandler.RegisterMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	csvData, _, err := service.ListEventsCSV(ctx, &RequestQueryOptions{
+	csvData, _, err := service.ListCSVV0(ctx, &RequestQueryOptions{
 		Filter:   "all",
 		Download: true,
 	})
@@ -173,7 +173,7 @@ func TestListEventsCSV_Success_WithDownload(t *testing.T) {
 	assert.Equal(t, 1, httpmock.GetTotalCallCount())
 }
 
-func TestListEventsCSV_Success_AllFilters(t *testing.T) {
+func TestListCSVV0_Success_AllFilters(t *testing.T) {
 	testCases := []struct {
 		name   string
 		filter string
@@ -192,7 +192,7 @@ func TestListEventsCSV_Success_AllFilters(t *testing.T) {
 			defer mockHandler.CleanupMockState()
 
 			ctx := context.Background()
-			csvData, _, err := service.ListEventsCSV(ctx, &RequestQueryOptions{
+			csvData, _, err := service.ListCSVV0(ctx, &RequestQueryOptions{
 				Filter: tc.filter,
 			})
 
@@ -203,14 +203,14 @@ func TestListEventsCSV_Success_AllFilters(t *testing.T) {
 	}
 }
 
-func TestListEventsCSV_Unauthorized(t *testing.T) {
+func TestListCSVV0_Unauthorized(t *testing.T) {
 	service, baseURL := setupMockClient(t)
 	mockHandler := &mocks.EventsMock{}
 	mockHandler.RegisterErrorMocks(baseURL)
 	defer mockHandler.CleanupMockState()
 
 	ctx := context.Background()
-	result, _, err := service.ListEventsCSV(ctx, nil)
+	result, _, err := service.ListCSVV0(ctx, nil)
 
 	require.Error(t, err)
 	assert.Nil(t, result)
@@ -228,13 +228,13 @@ func TestRequestQueryOptions_NilSafety(t *testing.T) {
 
 	ctx := context.Background()
 
-	// Test ListEvents with nil
-	events, _, err := service.ListEvents(ctx, nil)
+	// Test ListV0 with nil
+	events, _, err := service.ListV0(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, events)
 
-	// Test ListEventsCSV with nil
-	csv, _, err := service.ListEventsCSV(ctx, nil)
+	// Test ListCSVV0 with nil
+	csv, _, err := service.ListCSVV0(ctx, nil)
 	require.NoError(t, err)
 	require.NotNil(t, csv)
 }

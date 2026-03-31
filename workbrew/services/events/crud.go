@@ -8,47 +8,25 @@ import (
 	"resty.dev/v3"
 )
 
-// EventsServiceInterface defines the interface for events operations
-//
-// Workbrew API docs: https://console.workbrew.com/documentation/api
-type EventsServiceInterface interface {
-	// ListEvents returns a list of audit log events
+type (
+	// Events handles communication with the events-related methods of the Workbrew API.
 	//
-	// Returns audit log events with IDs, event types, timestamps, actor information, and target details.
-	// Supports filtering by actor type (user, system, or all) via query options.
-	ListEvents(ctx context.Context, opts *RequestQueryOptions) (*EventsResponse, *resty.Response, error)
-
-	// ListEventsCSV returns audit log events as CSV
-	//
-	// Returns audit log event data as CSV with columns: id, event_type, occurred_at, actor_id, actor_type, target_id, target_type, target_identifier.
-	// Supports filtering by actor type and optional download parameter via query options.
-	ListEventsCSV(ctx context.Context, opts *RequestQueryOptions) ([]byte, *resty.Response, error)
-}
-
-// Events handles communication with the events
-// related methods of the Workbrew API.
-//
-// Workbrew API docs: https://console.workbrew.com/documentation/api
-type Events struct {
-	client client.Client
-}
-
-// Ensure Events implements EventsServiceInterface
-var _ EventsServiceInterface = (*Events)(nil)
-
-// NewEvents creates a new events service
-func NewEvents(client client.Client) *Events {
-	return &Events{
-		client: client,
+	// Workbrew API docs: https://console.workbrew.com/documentation/api
+	Events struct {
+		client client.Client
 	}
+)
+
+func NewEvents(client client.Client) *Events {
+	return &Events{client: client}
 }
 
-// ListEvents retrieves all events in JSON format
+// ListV0 retrieves all events in JSON format.
 // URL: GET https://console.workbrew.com/workspaces/{workspace_name}/events.json
 //
 // Parameters:
 //   - opts: Optional query parameters (filter by actor type: user, system, all)
-func (s *Events) ListEvents(ctx context.Context, opts *RequestQueryOptions) (*EventsResponse, *resty.Response, error) {
+func (s *Events) ListV0(ctx context.Context, opts *RequestQueryOptions) (*EventsResponse, *resty.Response, error) {
 	if opts == nil {
 		opts = &RequestQueryOptions{}
 	}
@@ -67,12 +45,12 @@ func (s *Events) ListEvents(ctx context.Context, opts *RequestQueryOptions) (*Ev
 	return &result, resp, nil
 }
 
-// ListEventsCSV retrieves all events in CSV format
+// ListCSVV0 retrieves all events in CSV format.
 // URL: GET https://console.workbrew.com/workspaces/{workspace_name}/events.csv
 //
 // Parameters:
 //   - opts: Optional query parameters (filter by actor type, download flag)
-func (s *Events) ListEventsCSV(ctx context.Context, opts *RequestQueryOptions) ([]byte, *resty.Response, error) {
+func (s *Events) ListCSVV0(ctx context.Context, opts *RequestQueryOptions) ([]byte, *resty.Response, error) {
 	if opts == nil {
 		opts = &RequestQueryOptions{}
 	}

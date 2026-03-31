@@ -8,42 +8,22 @@ import (
 	"resty.dev/v3"
 )
 
-// BrewTapsServiceInterface defines the interface for brew taps operations
-//
-// Workbrew API docs: https://console.workbrew.com/documentation/api
-type BrewTapsServiceInterface interface {
-	// ListBrewTaps returns a list of Taps
+type (
+	// BrewTaps handles communication with the brew taps-related methods of the Workbrew API.
 	//
-	// Returns Homebrew taps with their names, assigned devices, installed formulae/casks counts, and available packages.
-	ListBrewTaps(ctx context.Context) (*BrewTapsResponse, *resty.Response, error)
-
-	// ListBrewTapsCSV returns a list of Taps in CSV format
-	//
-	// Returns tap data as CSV with columns: tap, devices, formulae_installed, casks_installed, available_packages.
-	ListBrewTapsCSV(ctx context.Context) ([]byte, *resty.Response, error)
-}
-
-// BrewTaps handles communication with the brew taps
-// related methods of the Workbrew API.
-//
-// Workbrew API docs: https://console.workbrew.com/documentation/api
-type BrewTaps struct {
-	client client.Client
-}
-
-// Ensure BrewTaps implements BrewTapsServiceInterface
-var _ BrewTapsServiceInterface = (*BrewTaps)(nil)
-
-// NewBrewTaps creates a new brew taps service
-func NewBrewTaps(client client.Client) *BrewTaps {
-	return &BrewTaps{
-		client: client,
+	// Workbrew API docs: https://console.workbrew.com/documentation/api
+	BrewTaps struct {
+		client client.Client
 	}
+)
+
+func NewBrewTaps(client client.Client) *BrewTaps {
+	return &BrewTaps{client: client}
 }
 
-// ListBrewTaps retrieves all brew taps in JSON format
+// ListV0 retrieves all brew taps in JSON format.
 // URL: GET https://console.workbrew.com/workspaces/{workspace_name}/brew_taps.json
-func (s *BrewTaps) ListBrewTaps(ctx context.Context) (*BrewTapsResponse, *resty.Response, error) {
+func (s *BrewTaps) ListV0(ctx context.Context) (*BrewTapsResponse, *resty.Response, error) {
 	var result BrewTapsResponse
 	resp, err := s.client.NewRequest(ctx).
 		SetHeader("Accept", constants.ApplicationJSON).
@@ -57,9 +37,9 @@ func (s *BrewTaps) ListBrewTaps(ctx context.Context) (*BrewTapsResponse, *resty.
 	return &result, resp, nil
 }
 
-// ListBrewTapsCSV retrieves all brew taps in CSV format
+// ListCSVV0 retrieves all brew taps in CSV format.
 // URL: GET https://console.workbrew.com/workspaces/{workspace_name}/brew_taps.csv
-func (s *BrewTaps) ListBrewTapsCSV(ctx context.Context) ([]byte, *resty.Response, error) {
+func (s *BrewTaps) ListCSVV0(ctx context.Context) ([]byte, *resty.Response, error) {
 	resp, csvData, err := s.client.NewRequest(ctx).
 		SetHeader("Accept", constants.TextCSV).
 		GetBytes(constants.EndpointBrewTapsCSV)

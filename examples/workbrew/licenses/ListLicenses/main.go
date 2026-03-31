@@ -35,7 +35,7 @@ func main() {
 
 
 	ctx := context.Background()
-	licensesList, _, err := workbrewClient.Licenses.ListLicenses(ctx)
+	licensesList, _, err := workbrewClient.Licenses.ListV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list licenses: %v", err)
 	}

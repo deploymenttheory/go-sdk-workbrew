@@ -35,7 +35,7 @@ func main() {
 
 
 	ctx := context.Background()
-	csvData, _, err := workbrewClient.Vulnerabilities.ListVulnerabilitiesCSV(ctx)
+	csvData, _, err := workbrewClient.Vulnerabilities.ListCSVV0(ctx)
 	if err != nil {
 		log.Fatalf("Failed to list vulnerabilities CSV: %v", err)
 	}
