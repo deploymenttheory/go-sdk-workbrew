@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0](https://github.com/deploymenttheory/go-sdk-workbrew/compare/v0.1.0...v0.2.0) (2026-03-31)
+
+
+### Features
+
+* refactor to follow new sdk patterns ([d09033f](https://github.com/deploymenttheory/go-sdk-workbrew/commit/d09033f6efe5a74c511dc9a1f79d2ff4c8a8d925))
+
 ## 0.1.0 (2026-02-17)
 
 
