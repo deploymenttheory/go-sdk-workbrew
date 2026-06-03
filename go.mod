@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/jarcoal/httpmock v1.4.1
 	github.com/stretchr/testify v1.11.1
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.68.0
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.69.0
 	go.opentelemetry.io/otel v1.44.0
 	go.opentelemetry.io/otel/sdk v1.44.0
 	go.opentelemetry.io/otel/trace v1.44.0
